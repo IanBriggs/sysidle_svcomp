@@ -1,3 +1,9 @@
+extern void __VERIFIER_error() __attribute__ ((__noreturn__));
+
+extern void __VERIFIER_atomic_begin();
+extern void __VERIFIER_atomic_end();
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
@@ -6,8 +12,6 @@
 #include <string.h>
 #include <poll.h>
 #include "fake.h"
-
-extern void __VERIFIER_error() __attribute__ ((__noreturn__));
 
 #define CONFIG_NR_CPUS 2
 #define NR_CPUS CONFIG_NR_CPUS
@@ -232,9 +236,9 @@ int main(int argc, char *argv[])
 	}
 	printf("End of stress test.\n");
 
-	if (!(full_sysidle_state != RCU_SYSIDLE_FULL_NOTED ||
-	      (atomic_read(&rcu_preempt_data_array[1].dynticks->dynticks_idle) & 0x1) == 0 &&
-	      (atomic_read(&rcu_preempt_data_array[2].dynticks->dynticks_idle) & 0x1) == 0)) {
+	if (full_sysidle_state == RCU_SYSIDLE_FULL_NOTED ||
+	    (atomic_read(&rcu_preempt_data_array[1].dynticks->dynticks_idle) & 0x1) == 1 ||
+	    (atomic_read(&rcu_preempt_data_array[2].dynticks->dynticks_idle) & 0x1) == 1) {
 	  __VERIFIER_error();
 	}
 }

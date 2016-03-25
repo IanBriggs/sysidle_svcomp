@@ -82,7 +82,7 @@ extern void __add_wrong_size(void)
   int temp = (*ptr); \
   (*ptr) = arg; \
   __VERIFIER_atomic_end(); \
-  return temp;\
+  temp;\
 }) 
 // End SVCOMP Model
 
@@ -142,7 +142,7 @@ extern void __add_wrong_size(void)
     if (lock[0] != '\0') {						\
       __VERIFIER_atomic_end();						\
     }									\
-    return (*ptr);							\
+    (*ptr);								\
   })
 // End SVCOMP Model
 
