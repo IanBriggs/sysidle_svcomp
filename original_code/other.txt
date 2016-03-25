@@ -1,0 +1,78 @@
+o	Call rcu_sysidle_enter() from rcu_idle_enter() while irqs are
+	disabled.
+
+o	Call rcu_sysidle_exit() from rcu_idle_exit(), again while irqs
+	are disabled.
+
+o	rcu_sysidle_force_exit() must be called from the NO_HZ_FULL
+	mechanism from the timekeeping CPU whenever it has something
+	"real" to do.  Or NO_HZ_FULL can keep its own accounting.
+
+o	tick_broadcast_setup_oneshot() needs to rebind GP kthreads,
+	but only if it can be called after the scheduler is up.
+
+	Ditto for tick_setup_device().
+
+	Ditto for tick_handover_do_timer(), except that CPU hotplug
+	should be disabled for the timekeeping CPU.
+
+	Ditto for tick_sched_do_timer().  But in this case we will care
+	about concurrency...  But tick_do_timer_cpu == TICK_DO_TIMER_NONE
+	should never happen, right?  I guess that depends on whether
+	tick_nohz_stop_sched_tick() sets it that way on the timekeeping
+	CPU...	Same for can_stop_idle_tick(), except that preventing
+	CPU hotplug should prevent it.
+
+o	rcu_gp_fqs():
+
+	bool isidle = 0;
+	unsigned long maxj;
+
+	...
+
+	case RCU_SAVE_DYNTICK:
+
+		...
+
+		if (rsp == &rcu_sysidle_state)
+			isidle = 1;
+		maxj = jiffies - ULONG_MAX / 4;
+		force_qs_rsp(rsp, dyntick_save_progress_counter, &isidle, &maxj);
+
+		...
+
+		rcu_sysidle_report(rsp, isidle, maxj);
+
+		...
+
+	else:
+	
+		...
+
+		isidle = 0;
+		force_qs_rsp(rsp, rcu_implicit_dynticks_qs, &isidle, &maxj);
+
+o	rcu_gp_kthread() before loop:
+
+		rcu_bind_gp_kthread();
+
+o	rcu_gp_kthread() at beginning of loop:
+
+		if (smp_processor_id() != tick_do_timer_cpu)
+			rcu_bind_gp_kthread();
+
+o	force_qs_rnp(): add isidle and maxj pointer parameters
+
+	...
+
+	for (; cpu <= rnp->grphi; cpu++, bit <<= 1) {
+		if ((rnp->qsmask & bit) == 0)
+			*isidle = 0;
+		else if (f(per_cpu_ptr(rsp->rda, cpu), isidle, maxj))
+			mask |= bit;
+
+o	Add add isidle and maxj pointer parameters to
+	dyntick_save_progress_counter() and rcu_implicit_dynticks_qs().
+
+o	Update dyntick_nmi_jiffies whenever dynticks_nmi_nesting is
+	updated.
