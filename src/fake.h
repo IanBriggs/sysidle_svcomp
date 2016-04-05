@@ -39,6 +39,9 @@ typedef _Bool                   bool;
 
 #define LOCK_PREFIX "\n\tlock; "
 
+// Unlikely and likely relocated here to be defined when atomic.h is included
+#define likely(x) (x)
+#define unlikely(x) (x)
 #include "atomic.h"
 
 /*
@@ -296,8 +299,7 @@ extern void __add_wrong_size(void)
 #define ACCESS_ONCE(x) (*(volatile typeof(x) *)&(x))
 #define smp_mb() asm volatile("mfence":::"memory")
 
-#define likely(x) (x)
-#define unlikely(x) (x)
+// atomic.h needs likely and unlikely, so moved before atomic.h include
 
 void cpu_relax_poll(void)
 {
