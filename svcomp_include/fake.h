@@ -227,7 +227,21 @@ extern void __add_wrong_size(void)
  * xadd_sync() is always locked
  * xadd_local() is never locked
  */
-#define __xadd(ptr, inc, lock)	__xchg_op((ptr), (inc), xadd, lock)
+#define __xadd(ptr, inc, lock)						\
+    ({									\
+    if (lock[0] != '\0') {						\
+      __VERIFIER_atomic_begin();					\
+    }									\
+    int retval = (*ptr);						\
+    (*ptr) += inc;							\
+    if (lock[0] != '\0') {						\
+      __VERIFIER_atomic_end();						\
+    }									\
+    retval;								\
+  })
+/******************************************************************************/
+/* #define __xadd(ptr, inc, lock)	__xchg_op((ptr), (inc), xadd, lock)   */
+/******************************************************************************/
 #define xadd(ptr, inc)		__xadd((ptr), (inc), LOCK_PREFIX)
 #define xadd_sync(ptr, inc)	__xadd((ptr), (inc), "lock; ")
 #define xadd_local(ptr, inc)	__xadd((ptr), (inc), "")
