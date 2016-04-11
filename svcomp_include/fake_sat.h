@@ -182,7 +182,7 @@ void (*cpu_relax_func)(void) = cpu_relax_poll;
 
 #define cpu_relax() cpu_relax_func()
 
-int __thread my_smp_processor_id;
+int __thread my_smp_processor_id = -1;
 
 #define raw_smp_processor_id() my_smp_processor_id
 
