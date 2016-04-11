@@ -407,9 +407,10 @@ struct irq_work {
 	int a;
 };
 
-int __thread my_smp_processor_id;
+//REDEFINITION/REDECLARATION
+//int __thread my_smp_processor_id;
 
-#define raw_smp_processor_id() my_smp_processor_id
+//#define raw_smp_processor_id() my_smp_processor_id
 #define smp_processor_id() my_smp_processor_id
 
 #define WARN_ON_ONCE(c) ({ int __c = (c);  if (__c) abort(); c; })
