@@ -1,18 +1,22 @@
+extern void __VERIFIER_error();
+extern void __VERIFIER_atomic_begin();
+extern void __VERIFIER_atomic_end();
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
 #include <stdarg.h>
 #include <time.h>
 #include <string.h>
+#include <poll.h>   /* ADDED MISSING INCLUDE */
+#include <unistd.h> /* ADDED MISSING INCLUDE */
 #include "fake_sat.h"
-
-extern void __VERIFIER_error() __attribute__ ((__noreturn__));
 
 int __unbuffered_cnt = 0;
 
 #define ITER 5
 
-#define CONFIG_NR_CPUS 2
+#define CONFIG_NR_CPUS 3
 #define NR_CPUS CONFIG_NR_CPUS
 #define CONFIG_RCU_FANOUT 16
 #define CONFIG_RCU_FANOUT_LEAF 8
@@ -106,8 +110,10 @@ void *timekeeping_cpu(void *arg)
 		do_fqs(&rcu_preempt_state, rcu_preempt_data_array);
 		/* do_fqs(&rcu_sched_state, rcu_sched_data_array); */
 	}
-	asm("sync");
+	/* WEAK MEMORY MODEL NOT USED IN SVCOMP */
+	/* asm("sync"); */
 	__unbuffered_cnt++;
+	return NULL; /* RETURN ADDED TO SILENCE WARNING */
 }
 
 void *other_cpu(void *arg)
@@ -134,8 +140,10 @@ void *other_cpu(void *arg)
 		/* idle exit. */
 		rcu_sysidle_exit(rdtp, 0);
 	}
-	asm("sync");
+	/* WEAK MEMORY MODEL NOT USED IN SVCOMP */
+	/* asm("sync"); */
 	__unbuffered_cnt++;
+	return NULL; /* RETURN ADDED TO SILENCE WARNING */
 }
 
 int main(int argc, char *argv[])
@@ -175,11 +183,12 @@ int main(int argc, char *argv[])
 	rcu_sched_state.rda = rcu_sched_data_array;
 
 	/* Stress test. */
-
+	printf("Start stress test.\n");
 	pthread_create(&tids[0], NULL, timekeeping_cpu, &ta_array[0]);
 	for (i = 1; i < nthreads; i++) {
 		pthread_create(&tids[i], NULL, other_cpu, &ta_array[i]);
 	}
+
 
 	for (i = 0; i < nthreads; i++) {
 		void *junk;
@@ -189,21 +198,28 @@ int main(int argc, char *argv[])
 			abort();
 		}
 	}
+	printf("End of stress test.\n");
 
 	if (!(full_sysidle_state != RCU_SYSIDLE_FULL_NOTED ||
-	      (atomic_read(&rcu_preempt_data_array[1].dynticks->dynticks_idle) & 0x1) == 0 &&
-	      (atomic_read(&rcu_preempt_data_array[2].dynticks->dynticks_idle) & 0x1) == 0)) {
+	      ((atomic_read(&rcu_preempt_data_array[1].dynticks->dynticks_idle) & 0x1) == 0 &&
+	       (atomic_read(&rcu_preempt_data_array[2].dynticks->dynticks_idle) & 0x1) == 0))) {
 	  __VERIFIER_error();
 	}
 
-	/* i = 0; */
-	/* __CPROVER_ASYNC_0: timekeeping_cpu(&ta_array[0]); i++; */
-	/* __CPROVER_ASYNC_1: other_cpu(&ta_array[1]); i++; */
-	/* __CPROVER_ASYNC_2: other_cpu(&ta_array[2]); i++; */
-	/* __CPROVER_ASYNC_3: other_cpu(&ta_array[3]); i++; */
-	/* __CPROVER_assume(__unbuffered_cnt == i); */
-	/* assert(full_sysidle_state != RCU_SYSIDLE_FULL_NOTED || */
-	/*        (atomic_read(&rcu_preempt_data_array[1].dynticks->dynticks_idle) & 0x1) == 0 && */
-	/*        (atomic_read(&rcu_preempt_data_array[2].dynticks->dynticks_idle) & 0x1) == 0 && */
-	/*        (atomic_read(&rcu_preempt_data_array[3].dynticks->dynticks_idle) & 0x1) == 0); */
+
+	/* REPLACED WITH SVCOMP AND PTHREAD CALLS */
+	/*************************************************************************************************/
+        /* /\* Stress test. *\/										 */
+	/* i = 0;											 */
+	/* __CPROVER_ASYNC_0: timekeeping_cpu(&ta_array[0]); i++;					 */
+	/* __CPROVER_ASYNC_1: other_cpu(&ta_array[1]); i++;						 */
+	/* __CPROVER_ASYNC_2: other_cpu(&ta_array[2]); i++;						 */
+	/* __CPROVER_ASYNC_3: other_cpu(&ta_array[3]); i++;						 */
+	/* __CPROVER_assume(__unbuffered_cnt == i);							 */
+	/* assert(full_sysidle_state != RCU_SYSIDLE_FULL_NOTED ||					 */
+	/*        (atomic_read(&rcu_preempt_data_array[1].dynticks->dynticks_idle) & 0x1) == 0 &&	 */
+	/*        (atomic_read(&rcu_preempt_data_array[2].dynticks->dynticks_idle) & 0x1) == 0 &&	 */
+	/*        (atomic_read(&rcu_preempt_data_array[3].dynticks->dynticks_idle) & 0x1) == 0);	 */
+        /*************************************************************************************************/
+	return 0; /* RETURN ADDED TO SILENCE WARNING */
 }

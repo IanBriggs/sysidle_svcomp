@@ -1,15 +1,18 @@
+extern void __VERIFIER_error();
+extern void __VERIFIER_atomic_begin();
+extern void __VERIFIER_atomic_end();
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
 #include <stdarg.h>
 #include <time.h>
 #include <string.h>
-#include <poll.h>
+#include <poll.h>   /* ADDED MISSING INCLUDE */
+#include <unistd.h> /* ADDED MISSING INCLUDE */
 #include "fake.h"
 
-extern void __VERIFIER_error() __attribute__ ((__noreturn__));
-
-#define CONFIG_NR_CPUS 2
+#define CONFIG_NR_CPUS 3 /* SET TO 3 SIMULATED CORES */
 #define NR_CPUS CONFIG_NR_CPUS
 #define CONFIG_RCU_FANOUT 16
 #define CONFIG_RCU_FANOUT_LEAF 8
@@ -48,7 +51,7 @@ static int rcu_gp_in_progress(struct rcu_state *rsp)
 #include "sysidle.h"
 
 int goflag = 1;
-int nthreads = CONFIG_NR_CPUS;
+int nthreads = CONFIG_NR_CPUS; /* SET TO MATCH CONFIGURATION */
 
 struct thread_arg {
 	int me;
@@ -110,6 +113,7 @@ void *timekeeping_cpu(void *arg)
 		do_fqs(&rcu_preempt_state, rcu_preempt_data_array);
 		do_fqs(&rcu_sched_state, rcu_sched_data_array);
 	}
+	return NULL; /* RETURN ADDED TO SILENCE WARNING */
 }
 
 void *other_cpu(void *arg)
@@ -147,6 +151,7 @@ void *other_cpu(void *arg)
 		/* idle exit. */
 		rcu_sysidle_exit(rdtp, 0);
 	}
+	return NULL; /* RETURN ADDED TO SILENCE WARNING */
 }
 
 int main(int argc, char *argv[])
@@ -156,11 +161,13 @@ int main(int argc, char *argv[])
 	pthread_t *tids;
 
 	/* Parse single optional argument, # cpus. */
-	if (argc > 1) {
-		nr_cpu_ids = atoi(argv[1]);
-		nthreads = nr_cpu_ids;
-		printf("nr_cpu_ids set to %d\n", nr_cpu_ids);
-	}
+	/****************************************************************/
+        /* if (argc > 1) {					        */
+	/* 	nr_cpu_ids = atoi(argv[1]);			        */
+	/* 	nthreads = nr_cpu_ids;				        */
+	/* 	printf("nr_cpu_ids set to %d\n", nr_cpu_ids);	        */
+	/* }							        */
+        /****************************************************************/
 
 	/* Allocate arrays and initialize. */
 	rcu_preempt_data_array =
@@ -194,25 +201,27 @@ int main(int argc, char *argv[])
 	srandom(time(NULL));
 
 	/* Smoke test. */
-	/* printf("Start smoke test.\n"); */
-	/* for (i = 1; i < nthreads; i++) { */
-	/* 	my_smp_processor_id = i; */
-	/* 	rcu_sysidle_enter(&rcu_dynticks_array[i], 0); */
-	/* } */
-	/* my_smp_processor_id = 0; */
-	/* for (i = 0; i < 100; i++) { */
-	/* 	jiffies++; */
-	/* 	do_fqs(&rcu_preempt_state, rcu_preempt_data_array); */
-	/* 	do_fqs(&rcu_sched_state, rcu_sched_data_array); */
-	/* 	if (full_sysidle_state == RCU_SYSIDLE_FULL_NOTED) */
-	/* 		break; */
-	/* } */
-	/* WARN_ON_ONCE(full_sysidle_state != RCU_SYSIDLE_FULL_NOTED); */
-	/* for (i = 1; i < nthreads; i++) { */
-	/* 	my_smp_processor_id = i; */
-	/* 	rcu_sysidle_exit(&rcu_dynticks_array[i], 0); */
-	/* } */
-	/* printf("End of smoke test.\n"); */
+	/**********************************************************************/
+        /* printf("Start smoke test.\n");				      */
+	/* for (i = 1; i < nthreads; i++) {				      */
+	/* 	my_smp_processor_id = i;				      */
+	/* 	rcu_sysidle_enter(&rcu_dynticks_array[i], 0);		      */
+	/* }								      */
+	/* my_smp_processor_id = 0;					      */
+	/* for (i = 0; i < 100; i++) {					      */
+	/* 	jiffies++;						      */
+	/* 	do_fqs(&rcu_preempt_state, rcu_preempt_data_array);	      */
+	/* 	do_fqs(&rcu_sched_state, rcu_sched_data_array);		      */
+	/* 	if (full_sysidle_state == RCU_SYSIDLE_FULL_NOTED)	      */
+	/* 		break;						      */
+	/* }								      */
+	/* WARN_ON_ONCE(full_sysidle_state != RCU_SYSIDLE_FULL_NOTED);	      */
+	/* for (i = 1; i < nthreads; i++) {				      */
+	/* 	my_smp_processor_id = i;				      */
+	/* 	rcu_sysidle_exit(&rcu_dynticks_array[i], 0);		      */
+	/* }								      */
+	/* printf("End of smoke test.\n");				      */
+        /**********************************************************************/
 
 	/* Stress test. */
 	printf("Start stress test.\n");
@@ -233,8 +242,10 @@ int main(int argc, char *argv[])
 	printf("End of stress test.\n");
 
 	if (!(full_sysidle_state != RCU_SYSIDLE_FULL_NOTED ||
-	      (atomic_read(&rcu_preempt_data_array[1].dynticks->dynticks_idle) & 0x1) == 0 &&
-	      (atomic_read(&rcu_preempt_data_array[2].dynticks->dynticks_idle) & 0x1) == 0)) {
+	      ((atomic_read(&rcu_preempt_data_array[1].dynticks->dynticks_idle) & 0x1) == 0 &&
+	       (atomic_read(&rcu_preempt_data_array[2].dynticks->dynticks_idle) & 0x1) == 0))) {
 	  __VERIFIER_error();
 	}
+
+	return 0; /* RETURN ADDED TO SILENCE WARNING */
 }

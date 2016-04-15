@@ -500,68 +500,68 @@ DECLARE_PER_CPU(char, rcu_cpu_has_work);
 #ifndef RCU_TREE_NONCORE
 
 /* Forward declarations for rcutree_plugin.h */
-static void rcu_bootup_announce(void);
+/* UNUSED static void rcu_bootup_announce(void); */
 long rcu_batches_completed(void);
-static void rcu_preempt_note_context_switch(int cpu);
-static int rcu_preempt_blocked_readers_cgp(struct rcu_node *rnp);
+/* UNUSED static void rcu_preempt_note_context_switch(int cpu); */
+/* UNUSED static int rcu_preempt_blocked_readers_cgp(struct rcu_node *rnp); */
 #ifdef CONFIG_HOTPLUG_CPU
 static void rcu_report_unblock_qs_rnp(struct rcu_node *rnp,
 				      unsigned long flags);
 #endif /* #ifdef CONFIG_HOTPLUG_CPU */
-static void rcu_print_detail_task_stall(struct rcu_state *rsp);
-static int rcu_print_task_stall(struct rcu_node *rnp);
-static void rcu_preempt_check_blocked_tasks(struct rcu_node *rnp);
+/* UNUSED static void rcu_print_detail_task_stall(struct rcu_state *rsp); */
+/* UNUSED static int rcu_print_task_stall(struct rcu_node *rnp); */
+/* UNUSED static void rcu_preempt_check_blocked_tasks(struct rcu_node *rnp); */
 #ifdef CONFIG_HOTPLUG_CPU
 static int rcu_preempt_offline_tasks(struct rcu_state *rsp,
 				     struct rcu_node *rnp,
 				     struct rcu_data *rdp);
 #endif /* #ifdef CONFIG_HOTPLUG_CPU */
-static void rcu_preempt_check_callbacks(int cpu);
+/* UNUSED static void rcu_preempt_check_callbacks(int cpu); */
 void call_rcu(struct rcu_head *head, void (*func)(struct rcu_head *rcu));
 #if defined(CONFIG_HOTPLUG_CPU) || defined(CONFIG_TREE_PREEMPT_RCU)
 static void rcu_report_exp_rnp(struct rcu_state *rsp, struct rcu_node *rnp,
 			       bool wake);
 #endif /* #if defined(CONFIG_HOTPLUG_CPU) || defined(CONFIG_TREE_PREEMPT_RCU) */
-static void __init __rcu_init_preempt(void);
-static void rcu_initiate_boost(struct rcu_node *rnp, unsigned long flags);
-static void rcu_preempt_boost_start_gp(struct rcu_node *rnp);
-static void invoke_rcu_callbacks_kthread(void);
-static bool rcu_is_callbacks_kthread(void);
+/* UNUSED static void __init __rcu_init_preempt(void); */
+/* UNUSED static void rcu_initiate_boost(struct rcu_node *rnp, unsigned long flags); */
+/* UNUSED static void rcu_preempt_boost_start_gp(struct rcu_node *rnp); */
+/* UNUSED static void invoke_rcu_callbacks_kthread(void); */
+/* UNUSED static bool rcu_is_callbacks_kthread(void); */
 #ifdef CONFIG_RCU_BOOST
 static void rcu_preempt_do_callbacks(void);
 static int rcu_spawn_one_boost_kthread(struct rcu_state *rsp,
 						 struct rcu_node *rnp);
 #endif /* #ifdef CONFIG_RCU_BOOST */
-static void rcu_prepare_kthreads(int cpu);
-static void rcu_cleanup_after_idle(int cpu);
-static void rcu_prepare_for_idle(int cpu);
-static void rcu_idle_count_callbacks_posted(void);
-static void print_cpu_stall_info_begin(void);
-static void print_cpu_stall_info(struct rcu_state *rsp, int cpu);
-static void print_cpu_stall_info_end(void);
-static void zero_cpu_stall_ticks(struct rcu_data *rdp);
-static void increment_cpu_stall_ticks(void);
-static int rcu_nocb_needs_gp(struct rcu_state *rsp);
-static void rcu_nocb_gp_set(struct rcu_node *rnp, int nrq);
-static void rcu_nocb_gp_cleanup(struct rcu_state *rsp, struct rcu_node *rnp);
-static void rcu_init_one_nocb(struct rcu_node *rnp);
-static bool __call_rcu_nocb(struct rcu_data *rdp, struct rcu_head *rhp,
-			    bool lazy);
-static bool rcu_nocb_adopt_orphan_cbs(struct rcu_state *rsp,
-				      struct rcu_data *rdp);
-static void rcu_boot_init_nocb_percpu_data(struct rcu_data *rdp);
-static void rcu_spawn_nocb_kthreads(struct rcu_state *rsp);
+/* UNUSED static void rcu_prepare_kthreads(int cpu); */
+/* UNUSED static void rcu_cleanup_after_idle(int cpu); */
+/* UNUSED static void rcu_prepare_for_idle(int cpu); */
+/* UNUSED static void rcu_idle_count_callbacks_posted(void); */
+/* UNUSED static void print_cpu_stall_info_begin(void); */
+/* UNUSED static void print_cpu_stall_info(struct rcu_state *rsp, int cpu); */
+/* UNUSED static void print_cpu_stall_info_end(void); */
+/* UNUSED static void zero_cpu_stall_ticks(struct rcu_data *rdp); */
+/* UNUSED static void increment_cpu_stall_ticks(void); */
+/* UNUSED static int rcu_nocb_needs_gp(struct rcu_state *rsp); */
+/* UNUSED static void rcu_nocb_gp_set(struct rcu_node *rnp, int nrq); */
+/* UNUSED static void rcu_nocb_gp_cleanup(struct rcu_state *rsp, struct rcu_node *rnp); */
+/* UNUSED static void rcu_init_one_nocb(struct rcu_node *rnp); */
+/* UNUSED static bool __call_rcu_nocb(struct rcu_data *rdp, struct rcu_head *rhp, */
+/* UNUSED 			    bool lazy); */
+/* UNUSED static bool rcu_nocb_adopt_orphan_cbs(struct rcu_state *rsp, */
+/* UNUSED 				      struct rcu_data *rdp); */
+/* UNUSED static void rcu_boot_init_nocb_percpu_data(struct rcu_data *rdp); */
+/* UNUSED static void rcu_spawn_nocb_kthreads(struct rcu_state *rsp); */
 static void rcu_kick_nohz_cpu(int cpu);
-static bool init_nocb_callback_list(struct rcu_data *rdp);
+/* UNUSED static bool init_nocb_callback_list(struct rcu_data *rdp); */
 static void rcu_sysidle_enter(struct rcu_dynticks *rdtp, int irq);
 static void rcu_sysidle_exit(struct rcu_dynticks *rdtp, int irq);
 static void rcu_sysidle_check_cpu(struct rcu_data *rdp, bool *isidle,
 				  unsigned long *maxj);
-static bool is_sysidle_rcu_state(struct rcu_state *rsp);
-static void rcu_sysidle_report_gp(struct rcu_state *rsp, int isidle,
-				  unsigned long maxj);
-static void rcu_bind_gp_kthread(void);
-static void rcu_sysidle_init_percpu_data(struct rcu_dynticks *rdtp);
+/* UNUSED static bool is_sysidle_rcu_state(struct rcu_state *rsp); */
+/* UNUSED static void rcu_sysidle_report_gp(struct rcu_state *rsp, int isidle, */
+/* UNUSED 				  unsigned long maxj); */
+/* UNUSED static void rcu_bind_gp_kthread(void); */
+/* UNUSED static void rcu_sysidle_init_percpu_data(struct rcu_dynticks *rdtp); */
 
 #endif /* #ifndef RCU_TREE_NONCORE */
 

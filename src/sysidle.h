@@ -175,24 +175,24 @@ static void rcu_sysidle_check_cpu(struct rcu_data *rdp, bool *isidle,
 /*
  * Is this the flavor of RCU that is handling full-system idle?
  */
-static bool is_sysidle_rcu_state(struct rcu_state *rsp)
-{
-	return rsp == rcu_sysidle_state;
-}
+/* UNUSED static bool is_sysidle_rcu_state(struct rcu_state *rsp)	*/
+/* UNUSED {								*/
+/* UNUSED 	return rsp == rcu_sysidle_state;			*/
+/* UNUSED }								*/
 
 /*
  * Bind the grace-period kthread for the sysidle flavor of RCU to the
  * timekeeping CPU.
  */
-static void rcu_bind_gp_kthread(void)
-{
-	int cpu = ACCESS_ONCE(tick_do_timer_cpu);
-
-	if (cpu < 0 || cpu >= nr_cpu_ids)
-		return;
-	if (raw_smp_processor_id() != cpu)
-		set_cpus_allowed_ptr(current, cpumask_of(cpu));
-}
+/* UNUSED static void rcu_bind_gp_kthread(void)				*/
+/* UNUSED {								*/
+/* UNUSED 	int cpu = ACCESS_ONCE(tick_do_timer_cpu);		*/
+/* UNUSED								*/
+/* UNUSED 	if (cpu < 0 || cpu >= nr_cpu_ids)			*/
+/* UNUSED 		return;						*/
+/* UNUSED 	if (raw_smp_processor_id() != cpu)			*/
+/* UNUSED 		set_cpus_allowed_ptr(current, cpumask_of(cpu));	*/
+/* UNUSED }								*/
 
 /*
  * Return a delay in jiffies based on the number of CPUs, rcu_node
@@ -282,11 +282,11 @@ static void rcu_sysidle_report(struct rcu_state *rsp, int isidle,
  * Wrapper for rcu_sysidle_report() when called from the grace-period
  * kthread's context.
  */
-static void rcu_sysidle_report_gp(struct rcu_state *rsp, int isidle,
-				  unsigned long maxj)
-{
-	rcu_sysidle_report(rsp, isidle, maxj, true);
-}
+/* UNUSED static void rcu_sysidle_report_gp(struct rcu_state *rsp, int isidle,	*/
+/* UNUSED 				  unsigned long maxj)			*/
+/* UNUSED {									*/
+/* UNUSED 	rcu_sysidle_report(rsp, isidle, maxj, true);			*/
+/* UNUSED }									*/
 
 /* Callback and function for forcing an RCU grace period. */
 struct rcu_sysidle_head {
@@ -379,10 +379,10 @@ bool rcu_sys_is_idle(void)
 /*
  * Initialize dynticks sysidle state for CPUs coming online.
  */
-static void rcu_sysidle_init_percpu_data(struct rcu_dynticks *rdtp)
-{
-	rdtp->dynticks_idle_nesting = DYNTICK_TASK_NEST_VALUE;
-}
+/* UNUSED static void rcu_sysidle_init_percpu_data(struct rcu_dynticks *rdtp)	*/
+/* UNUSED {									*/
+/* UNUSED 	rdtp->dynticks_idle_nesting = DYNTICK_TASK_NEST_VALUE;		*/
+/* UNUSED }									*/
 
 #else /* #ifdef CONFIG_NO_HZ_FULL_SYSIDLE */
 

@@ -10,9 +10,13 @@ extern void __VERIFIER_atomic_end();
 #include <string.h>
 #include <poll.h>   /* ADDED MISSING INCLUDE */
 #include <unistd.h> /* ADDED MISSING INCLUDE */
-#include "fake.h"
+#include "fake_sat.h"
 
-#define CONFIG_NR_CPUS 3 /* SET TO 3 SIMULATED CORES */
+int __unbuffered_cnt = 0;
+
+#define ITER 5
+
+#define CONFIG_NR_CPUS 3
 #define NR_CPUS CONFIG_NR_CPUS
 #define CONFIG_RCU_FANOUT 16
 #define CONFIG_RCU_FANOUT_LEAF 8
@@ -50,8 +54,7 @@ static int rcu_gp_in_progress(struct rcu_state *rsp)
 
 #include "sysidle.h"
 
-int goflag = 1;
-int nthreads = CONFIG_NR_CPUS; /* SET TO MATCH CONFIGURATION */
+int nthreads = CONFIG_NR_CPUS;
 
 struct thread_arg {
 	int me;
@@ -71,8 +74,6 @@ void do_fqs(struct rcu_state *rsp, struct rcu_data *rdp_in)
 	maxj = jiffies - ULONG_MAX / 4;
 	for (i = 0; i < nthreads; i++) {
 		rdp = &rdp_in[i];
-		if ((random() & 0xff) == 0)
-			poll(NULL, 0, 20);
 		rcu_sysidle_check_cpu(rdp, &isidle, &maxj);
 	}
 	old_full_sysidle_state = ACCESS_ONCE(full_sysidle_state);
@@ -83,10 +84,6 @@ void do_fqs(struct rcu_state *rsp, struct rcu_data *rdp_in)
 		       jiffies,
 		       old_full_sysidle_state, new_full_sysidle_state);
 	old_full_sysidle_state = ACCESS_ONCE(full_sysidle_state);
-	if (old_full_sysidle_state == RCU_SYSIDLE_FULL)
-		poll(NULL, 0, 5);
-	else
-		poll(NULL, 0, 1);
 	if (rcu_sys_is_idle() &&
 	    old_full_sysidle_state != RCU_SYSIDLE_FULL_NOTED) {
 		printf("%lu: System fully idle\n", jiffies);
@@ -106,51 +103,46 @@ void *timekeeping_cpu(void *arg)
 	struct thread_arg *tap = (struct thread_arg *)arg;
 
 	my_smp_processor_id = tap->me;
-	while (ACCESS_ONCE(goflag)) {
+	for (i = 0; i < ITER; i++) {
 		jiffies++;
 
 		/* FQS scan for RCU-preempt and then RCU-sched. */
 		do_fqs(&rcu_preempt_state, rcu_preempt_data_array);
-		do_fqs(&rcu_sched_state, rcu_sched_data_array);
+		/* do_fqs(&rcu_sched_state, rcu_sched_data_array); */
 	}
+	/* WEAK MEMORY MODEL NOT USED IN SVCOMP */
+	/* asm("sync"); */
+	__unbuffered_cnt++;
 	return NULL; /* RETURN ADDED TO SILENCE WARNING */
 }
 
 void *other_cpu(void *arg)
 {
+	int i;
 	int nest;
 	struct rcu_dynticks *rdtp;
 	struct thread_arg *tap = (struct thread_arg *)arg;
 
 	my_smp_processor_id = tap->me;
 	rdtp = &rcu_dynticks_array[tap->me];
-	while (ACCESS_ONCE(goflag)) {
+	for (i = 0; i < ITER; i++) {
 		/* busy period. */
 		WARN_ON_ONCE(full_sysidle_state > RCU_SYSIDLE_LONG);
-		poll(NULL, 0, random() % 10 + 1);
 		WARN_ON_ONCE(full_sysidle_state > RCU_SYSIDLE_LONG);
 
 		/* idle entry. */
 		rcu_sysidle_enter(rdtp, 0);
-		poll(NULL, 0, 1);
 
 		/* Interrupts from idle. */
-		nest = 0;
-		while (random() & 0x100) {
-			rcu_sysidle_exit(rdtp, 1);
-			nest++;
-		}
-		poll(NULL, 0, 1);
-		while (nest-- > 0) {
-			rcu_sysidle_enter(rdtp, 1);
-		}
-
-		/* idle period. */
-		poll(NULL, 0, random() % 100 + 1);
+		rcu_sysidle_exit(rdtp, 1);
+		rcu_sysidle_enter(rdtp, 1);
 
 		/* idle exit. */
 		rcu_sysidle_exit(rdtp, 0);
 	}
+	/* WEAK MEMORY MODEL NOT USED IN SVCOMP */
+	/* asm("sync"); */
+	__unbuffered_cnt++;
 	return NULL; /* RETURN ADDED TO SILENCE WARNING */
 }
 
@@ -159,15 +151,6 @@ int main(int argc, char *argv[])
 	int i;
 	struct thread_arg *ta_array;
 	pthread_t *tids;
-
-	/* Parse single optional argument, # cpus. */
-	/****************************************************************/
-        /* if (argc > 1) {					        */
-	/* 	nr_cpu_ids = atoi(argv[1]);			        */
-	/* 	nthreads = nr_cpu_ids;				        */
-	/* 	printf("nr_cpu_ids set to %d\n", nr_cpu_ids);	        */
-	/* }							        */
-        /****************************************************************/
 
 	/* Allocate arrays and initialize. */
 	rcu_preempt_data_array =
@@ -198,30 +181,6 @@ int main(int argc, char *argv[])
 	}
 	rcu_preempt_state.rda = rcu_preempt_data_array;
 	rcu_sched_state.rda = rcu_sched_data_array;
-	srandom(time(NULL));
-
-	/* Smoke test. */
-	/**********************************************************************/
-        /* printf("Start smoke test.\n");				      */
-	/* for (i = 1; i < nthreads; i++) {				      */
-	/* 	my_smp_processor_id = i;				      */
-	/* 	rcu_sysidle_enter(&rcu_dynticks_array[i], 0);		      */
-	/* }								      */
-	/* my_smp_processor_id = 0;					      */
-	/* for (i = 0; i < 100; i++) {					      */
-	/* 	jiffies++;						      */
-	/* 	do_fqs(&rcu_preempt_state, rcu_preempt_data_array);	      */
-	/* 	do_fqs(&rcu_sched_state, rcu_sched_data_array);		      */
-	/* 	if (full_sysidle_state == RCU_SYSIDLE_FULL_NOTED)	      */
-	/* 		break;						      */
-	/* }								      */
-	/* WARN_ON_ONCE(full_sysidle_state != RCU_SYSIDLE_FULL_NOTED);	      */
-	/* for (i = 1; i < nthreads; i++) {				      */
-	/* 	my_smp_processor_id = i;				      */
-	/* 	rcu_sysidle_exit(&rcu_dynticks_array[i], 0);		      */
-	/* }								      */
-	/* printf("End of smoke test.\n");				      */
-        /**********************************************************************/
 
 	/* Stress test. */
 	printf("Start stress test.\n");
@@ -229,8 +188,8 @@ int main(int argc, char *argv[])
 	for (i = 1; i < nthreads; i++) {
 		pthread_create(&tids[i], NULL, other_cpu, &ta_array[i]);
 	}
-	sleep(10);
-	ACCESS_ONCE(goflag) = 0;
+
+
 	for (i = 0; i < nthreads; i++) {
 		void *junk;
 
@@ -248,5 +207,19 @@ int main(int argc, char *argv[])
 	  __VERIFIER_error();
 	}
 
+	/* REPLACED WITH SVCOMP AND PTHREAD CALLS */
+	/*************************************************************************************************/
+        /* /\* Stress test. *\/										 */
+	/* i = 0;											 */
+	/* __CPROVER_ASYNC_0: timekeeping_cpu(&ta_array[0]); i++;					 */
+	/* __CPROVER_ASYNC_1: other_cpu(&ta_array[1]); i++;						 */
+	/* __CPROVER_ASYNC_2: other_cpu(&ta_array[2]); i++;						 */
+	/* __CPROVER_ASYNC_3: other_cpu(&ta_array[3]); i++;						 */
+	/* __CPROVER_assume(__unbuffered_cnt == i);							 */
+	/* assert(full_sysidle_state != RCU_SYSIDLE_FULL_NOTED ||					 */
+	/*        (atomic_read(&rcu_preempt_data_array[1].dynticks->dynticks_idle) & 0x1) == 0 &&	 */
+	/*        (atomic_read(&rcu_preempt_data_array[2].dynticks->dynticks_idle) & 0x1) == 0 &&	 */
+	/*        (atomic_read(&rcu_preempt_data_array[3].dynticks->dynticks_idle) & 0x1) == 0);	 */
+        /*************************************************************************************************/
 	return 0; /* RETURN ADDED TO SILENCE WARNING */
 }

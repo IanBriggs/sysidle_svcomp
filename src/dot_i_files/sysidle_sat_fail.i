@@ -1,11 +1,9 @@
 
 
 
-extern void __VERIFIER_error() __attribute__ ((__noreturn__));
-
+extern void __VERIFIER_error();
 extern void __VERIFIER_atomic_begin();
 extern void __VERIFIER_atomic_end();
-
 
 
 
@@ -3122,6 +3120,1190 @@ extern int poll (struct pollfd *__fds, nfds_t __nfds, int __timeout);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+typedef __useconds_t useconds_t;
+
+typedef __intptr_t intptr_t;
+
+
+
+
+
+
+typedef __socklen_t socklen_t;
+
+extern int access (__const char *__name, int __type) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+
+extern int faccessat (int __fd, __const char *__file, int __type, int __flag)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (2))) ;
+
+extern __off_t lseek (int __fd, __off_t __offset, int __whence) __attribute__ ((__nothrow__ , __leaf__));
+
+extern int close (int __fd);
+
+
+
+
+
+
+extern ssize_t read (int __fd, void *__buf, size_t __nbytes) ;
+
+
+
+
+
+extern ssize_t write (int __fd, __const void *__buf, size_t __n) ;
+
+extern ssize_t pread (int __fd, void *__buf, size_t __nbytes,
+        __off_t __offset) ;
+
+
+
+
+
+
+extern ssize_t pwrite (int __fd, __const void *__buf, size_t __n,
+         __off_t __offset) ;
+
+extern int pipe (int __pipedes[2]) __attribute__ ((__nothrow__ , __leaf__)) ;
+
+extern unsigned int alarm (unsigned int __seconds) __attribute__ ((__nothrow__ , __leaf__));
+
+extern unsigned int sleep (unsigned int __seconds);
+
+
+
+
+
+
+
+extern __useconds_t ualarm (__useconds_t __value, __useconds_t __interval)
+     __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+
+
+extern int usleep (__useconds_t __useconds);
+
+extern int pause (void);
+
+
+
+extern int chown (__const char *__file, __uid_t __owner, __gid_t __group)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1))) ;
+
+
+
+extern int fchown (int __fd, __uid_t __owner, __gid_t __group) __attribute__ ((__nothrow__ , __leaf__)) ;
+
+
+
+
+extern int lchown (__const char *__file, __uid_t __owner, __gid_t __group)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1))) ;
+
+
+
+
+
+
+extern int fchownat (int __fd, __const char *__file, __uid_t __owner,
+       __gid_t __group, int __flag)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (2))) ;
+
+
+
+extern int chdir (__const char *__path) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1))) ;
+
+
+
+extern int fchdir (int __fd) __attribute__ ((__nothrow__ , __leaf__)) ;
+
+extern char *getcwd (char *__buf, size_t __size) __attribute__ ((__nothrow__ , __leaf__)) ;
+
+extern char *getwd (char *__buf)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1))) __attribute__ ((__deprecated__)) ;
+
+
+
+
+extern int dup (int __fd) __attribute__ ((__nothrow__ , __leaf__)) ;
+
+
+extern int dup2 (int __fd, int __fd2) __attribute__ ((__nothrow__ , __leaf__));
+
+extern char **__environ;
+
+
+
+
+
+
+
+extern int execve (__const char *__path, char *__const __argv[],
+     char *__const __envp[]) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+
+extern int fexecve (int __fd, char *__const __argv[], char *__const __envp[])
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (2)));
+
+
+
+
+extern int execv (__const char *__path, char *__const __argv[])
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+extern int execle (__const char *__path, __const char *__arg, ...)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+extern int execl (__const char *__path, __const char *__arg, ...)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+extern int execvp (__const char *__file, char *__const __argv[])
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+
+extern int execlp (__const char *__file, __const char *__arg, ...)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
+
+extern int nice (int __inc) __attribute__ ((__nothrow__ , __leaf__)) ;
+
+
+
+
+extern void _exit (int __status) __attribute__ ((__noreturn__));
+
+
+
+
+
+
+
+enum
+  {
+    _PC_LINK_MAX,
+
+    _PC_MAX_CANON,
+
+    _PC_MAX_INPUT,
+
+    _PC_NAME_MAX,
+
+    _PC_PATH_MAX,
+
+    _PC_PIPE_BUF,
+
+    _PC_CHOWN_RESTRICTED,
+
+    _PC_NO_TRUNC,
+
+    _PC_VDISABLE,
+
+    _PC_SYNC_IO,
+
+    _PC_ASYNC_IO,
+
+    _PC_PRIO_IO,
+
+    _PC_SOCK_MAXBUF,
+
+    _PC_FILESIZEBITS,
+
+    _PC_REC_INCR_XFER_SIZE,
+
+    _PC_REC_MAX_XFER_SIZE,
+
+    _PC_REC_MIN_XFER_SIZE,
+
+    _PC_REC_XFER_ALIGN,
+
+    _PC_ALLOC_SIZE_MIN,
+
+    _PC_SYMLINK_MAX,
+
+    _PC_2_SYMLINKS
+
+  };
+
+
+enum
+  {
+    _SC_ARG_MAX,
+
+    _SC_CHILD_MAX,
+
+    _SC_CLK_TCK,
+
+    _SC_NGROUPS_MAX,
+
+    _SC_OPEN_MAX,
+
+    _SC_STREAM_MAX,
+
+    _SC_TZNAME_MAX,
+
+    _SC_JOB_CONTROL,
+
+    _SC_SAVED_IDS,
+
+    _SC_REALTIME_SIGNALS,
+
+    _SC_PRIORITY_SCHEDULING,
+
+    _SC_TIMERS,
+
+    _SC_ASYNCHRONOUS_IO,
+
+    _SC_PRIORITIZED_IO,
+
+    _SC_SYNCHRONIZED_IO,
+
+    _SC_FSYNC,
+
+    _SC_MAPPED_FILES,
+
+    _SC_MEMLOCK,
+
+    _SC_MEMLOCK_RANGE,
+
+    _SC_MEMORY_PROTECTION,
+
+    _SC_MESSAGE_PASSING,
+
+    _SC_SEMAPHORES,
+
+    _SC_SHARED_MEMORY_OBJECTS,
+
+    _SC_AIO_LISTIO_MAX,
+
+    _SC_AIO_MAX,
+
+    _SC_AIO_PRIO_DELTA_MAX,
+
+    _SC_DELAYTIMER_MAX,
+
+    _SC_MQ_OPEN_MAX,
+
+    _SC_MQ_PRIO_MAX,
+
+    _SC_VERSION,
+
+    _SC_PAGESIZE,
+
+
+    _SC_RTSIG_MAX,
+
+    _SC_SEM_NSEMS_MAX,
+
+    _SC_SEM_VALUE_MAX,
+
+    _SC_SIGQUEUE_MAX,
+
+    _SC_TIMER_MAX,
+
+
+
+
+    _SC_BC_BASE_MAX,
+
+    _SC_BC_DIM_MAX,
+
+    _SC_BC_SCALE_MAX,
+
+    _SC_BC_STRING_MAX,
+
+    _SC_COLL_WEIGHTS_MAX,
+
+    _SC_EQUIV_CLASS_MAX,
+
+    _SC_EXPR_NEST_MAX,
+
+    _SC_LINE_MAX,
+
+    _SC_RE_DUP_MAX,
+
+    _SC_CHARCLASS_NAME_MAX,
+
+
+    _SC_2_VERSION,
+
+    _SC_2_C_BIND,
+
+    _SC_2_C_DEV,
+
+    _SC_2_FORT_DEV,
+
+    _SC_2_FORT_RUN,
+
+    _SC_2_SW_DEV,
+
+    _SC_2_LOCALEDEF,
+
+
+    _SC_PII,
+
+    _SC_PII_XTI,
+
+    _SC_PII_SOCKET,
+
+    _SC_PII_INTERNET,
+
+    _SC_PII_OSI,
+
+    _SC_POLL,
+
+    _SC_SELECT,
+
+    _SC_UIO_MAXIOV,
+
+    _SC_IOV_MAX = _SC_UIO_MAXIOV,
+
+    _SC_PII_INTERNET_STREAM,
+
+    _SC_PII_INTERNET_DGRAM,
+
+    _SC_PII_OSI_COTS,
+
+    _SC_PII_OSI_CLTS,
+
+    _SC_PII_OSI_M,
+
+    _SC_T_IOV_MAX,
+
+
+
+    _SC_THREADS,
+
+    _SC_THREAD_SAFE_FUNCTIONS,
+
+    _SC_GETGR_R_SIZE_MAX,
+
+    _SC_GETPW_R_SIZE_MAX,
+
+    _SC_LOGIN_NAME_MAX,
+
+    _SC_TTY_NAME_MAX,
+
+    _SC_THREAD_DESTRUCTOR_ITERATIONS,
+
+    _SC_THREAD_KEYS_MAX,
+
+    _SC_THREAD_STACK_MIN,
+
+    _SC_THREAD_THREADS_MAX,
+
+    _SC_THREAD_ATTR_STACKADDR,
+
+    _SC_THREAD_ATTR_STACKSIZE,
+
+    _SC_THREAD_PRIORITY_SCHEDULING,
+
+    _SC_THREAD_PRIO_INHERIT,
+
+    _SC_THREAD_PRIO_PROTECT,
+
+    _SC_THREAD_PROCESS_SHARED,
+
+
+    _SC_NPROCESSORS_CONF,
+
+    _SC_NPROCESSORS_ONLN,
+
+    _SC_PHYS_PAGES,
+
+    _SC_AVPHYS_PAGES,
+
+    _SC_ATEXIT_MAX,
+
+    _SC_PASS_MAX,
+
+
+    _SC_XOPEN_VERSION,
+
+    _SC_XOPEN_XCU_VERSION,
+
+    _SC_XOPEN_UNIX,
+
+    _SC_XOPEN_CRYPT,
+
+    _SC_XOPEN_ENH_I18N,
+
+    _SC_XOPEN_SHM,
+
+
+    _SC_2_CHAR_TERM,
+
+    _SC_2_C_VERSION,
+
+    _SC_2_UPE,
+
+
+    _SC_XOPEN_XPG2,
+
+    _SC_XOPEN_XPG3,
+
+    _SC_XOPEN_XPG4,
+
+
+    _SC_CHAR_BIT,
+
+    _SC_CHAR_MAX,
+
+    _SC_CHAR_MIN,
+
+    _SC_INT_MAX,
+
+    _SC_INT_MIN,
+
+    _SC_LONG_BIT,
+
+    _SC_WORD_BIT,
+
+    _SC_MB_LEN_MAX,
+
+    _SC_NZERO,
+
+    _SC_SSIZE_MAX,
+
+    _SC_SCHAR_MAX,
+
+    _SC_SCHAR_MIN,
+
+    _SC_SHRT_MAX,
+
+    _SC_SHRT_MIN,
+
+    _SC_UCHAR_MAX,
+
+    _SC_UINT_MAX,
+
+    _SC_ULONG_MAX,
+
+    _SC_USHRT_MAX,
+
+
+    _SC_NL_ARGMAX,
+
+    _SC_NL_LANGMAX,
+
+    _SC_NL_MSGMAX,
+
+    _SC_NL_NMAX,
+
+    _SC_NL_SETMAX,
+
+    _SC_NL_TEXTMAX,
+
+
+    _SC_XBS5_ILP32_OFF32,
+
+    _SC_XBS5_ILP32_OFFBIG,
+
+    _SC_XBS5_LP64_OFF64,
+
+    _SC_XBS5_LPBIG_OFFBIG,
+
+
+    _SC_XOPEN_LEGACY,
+
+    _SC_XOPEN_REALTIME,
+
+    _SC_XOPEN_REALTIME_THREADS,
+
+
+    _SC_ADVISORY_INFO,
+
+    _SC_BARRIERS,
+
+    _SC_BASE,
+
+    _SC_C_LANG_SUPPORT,
+
+    _SC_C_LANG_SUPPORT_R,
+
+    _SC_CLOCK_SELECTION,
+
+    _SC_CPUTIME,
+
+    _SC_THREAD_CPUTIME,
+
+    _SC_DEVICE_IO,
+
+    _SC_DEVICE_SPECIFIC,
+
+    _SC_DEVICE_SPECIFIC_R,
+
+    _SC_FD_MGMT,
+
+    _SC_FIFO,
+
+    _SC_PIPE,
+
+    _SC_FILE_ATTRIBUTES,
+
+    _SC_FILE_LOCKING,
+
+    _SC_FILE_SYSTEM,
+
+    _SC_MONOTONIC_CLOCK,
+
+    _SC_MULTI_PROCESS,
+
+    _SC_SINGLE_PROCESS,
+
+    _SC_NETWORKING,
+
+    _SC_READER_WRITER_LOCKS,
+
+    _SC_SPIN_LOCKS,
+
+    _SC_REGEXP,
+
+    _SC_REGEX_VERSION,
+
+    _SC_SHELL,
+
+    _SC_SIGNALS,
+
+    _SC_SPAWN,
+
+    _SC_SPORADIC_SERVER,
+
+    _SC_THREAD_SPORADIC_SERVER,
+
+    _SC_SYSTEM_DATABASE,
+
+    _SC_SYSTEM_DATABASE_R,
+
+    _SC_TIMEOUTS,
+
+    _SC_TYPED_MEMORY_OBJECTS,
+
+    _SC_USER_GROUPS,
+
+    _SC_USER_GROUPS_R,
+
+    _SC_2_PBS,
+
+    _SC_2_PBS_ACCOUNTING,
+
+    _SC_2_PBS_LOCATE,
+
+    _SC_2_PBS_MESSAGE,
+
+    _SC_2_PBS_TRACK,
+
+    _SC_SYMLOOP_MAX,
+
+    _SC_STREAMS,
+
+    _SC_2_PBS_CHECKPOINT,
+
+
+    _SC_V6_ILP32_OFF32,
+
+    _SC_V6_ILP32_OFFBIG,
+
+    _SC_V6_LP64_OFF64,
+
+    _SC_V6_LPBIG_OFFBIG,
+
+
+    _SC_HOST_NAME_MAX,
+
+    _SC_TRACE,
+
+    _SC_TRACE_EVENT_FILTER,
+
+    _SC_TRACE_INHERIT,
+
+    _SC_TRACE_LOG,
+
+
+    _SC_LEVEL1_ICACHE_SIZE,
+
+    _SC_LEVEL1_ICACHE_ASSOC,
+
+    _SC_LEVEL1_ICACHE_LINESIZE,
+
+    _SC_LEVEL1_DCACHE_SIZE,
+
+    _SC_LEVEL1_DCACHE_ASSOC,
+
+    _SC_LEVEL1_DCACHE_LINESIZE,
+
+    _SC_LEVEL2_CACHE_SIZE,
+
+    _SC_LEVEL2_CACHE_ASSOC,
+
+    _SC_LEVEL2_CACHE_LINESIZE,
+
+    _SC_LEVEL3_CACHE_SIZE,
+
+    _SC_LEVEL3_CACHE_ASSOC,
+
+    _SC_LEVEL3_CACHE_LINESIZE,
+
+    _SC_LEVEL4_CACHE_SIZE,
+
+    _SC_LEVEL4_CACHE_ASSOC,
+
+    _SC_LEVEL4_CACHE_LINESIZE,
+
+
+
+    _SC_IPV6 = _SC_LEVEL1_ICACHE_SIZE + 50,
+
+    _SC_RAW_SOCKETS,
+
+
+    _SC_V7_ILP32_OFF32,
+
+    _SC_V7_ILP32_OFFBIG,
+
+    _SC_V7_LP64_OFF64,
+
+    _SC_V7_LPBIG_OFFBIG,
+
+
+    _SC_SS_REPL_MAX,
+
+
+    _SC_TRACE_EVENT_NAME_MAX,
+
+    _SC_TRACE_NAME_MAX,
+
+    _SC_TRACE_SYS_MAX,
+
+    _SC_TRACE_USER_EVENT_MAX,
+
+
+    _SC_XOPEN_STREAMS,
+
+
+    _SC_THREAD_ROBUST_PRIO_INHERIT,
+
+    _SC_THREAD_ROBUST_PRIO_PROTECT
+
+  };
+
+
+enum
+  {
+    _CS_PATH,
+
+
+    _CS_V6_WIDTH_RESTRICTED_ENVS,
+
+
+
+    _CS_GNU_LIBC_VERSION,
+
+    _CS_GNU_LIBPTHREAD_VERSION,
+
+
+    _CS_V5_WIDTH_RESTRICTED_ENVS,
+
+
+
+    _CS_V7_WIDTH_RESTRICTED_ENVS,
+
+
+
+    _CS_LFS_CFLAGS = 1000,
+
+    _CS_LFS_LDFLAGS,
+
+    _CS_LFS_LIBS,
+
+    _CS_LFS_LINTFLAGS,
+
+    _CS_LFS64_CFLAGS,
+
+    _CS_LFS64_LDFLAGS,
+
+    _CS_LFS64_LIBS,
+
+    _CS_LFS64_LINTFLAGS,
+
+
+    _CS_XBS5_ILP32_OFF32_CFLAGS = 1100,
+
+    _CS_XBS5_ILP32_OFF32_LDFLAGS,
+
+    _CS_XBS5_ILP32_OFF32_LIBS,
+
+    _CS_XBS5_ILP32_OFF32_LINTFLAGS,
+
+    _CS_XBS5_ILP32_OFFBIG_CFLAGS,
+
+    _CS_XBS5_ILP32_OFFBIG_LDFLAGS,
+
+    _CS_XBS5_ILP32_OFFBIG_LIBS,
+
+    _CS_XBS5_ILP32_OFFBIG_LINTFLAGS,
+
+    _CS_XBS5_LP64_OFF64_CFLAGS,
+
+    _CS_XBS5_LP64_OFF64_LDFLAGS,
+
+    _CS_XBS5_LP64_OFF64_LIBS,
+
+    _CS_XBS5_LP64_OFF64_LINTFLAGS,
+
+    _CS_XBS5_LPBIG_OFFBIG_CFLAGS,
+
+    _CS_XBS5_LPBIG_OFFBIG_LDFLAGS,
+
+    _CS_XBS5_LPBIG_OFFBIG_LIBS,
+
+    _CS_XBS5_LPBIG_OFFBIG_LINTFLAGS,
+
+
+    _CS_POSIX_V6_ILP32_OFF32_CFLAGS,
+
+    _CS_POSIX_V6_ILP32_OFF32_LDFLAGS,
+
+    _CS_POSIX_V6_ILP32_OFF32_LIBS,
+
+    _CS_POSIX_V6_ILP32_OFF32_LINTFLAGS,
+
+    _CS_POSIX_V6_ILP32_OFFBIG_CFLAGS,
+
+    _CS_POSIX_V6_ILP32_OFFBIG_LDFLAGS,
+
+    _CS_POSIX_V6_ILP32_OFFBIG_LIBS,
+
+    _CS_POSIX_V6_ILP32_OFFBIG_LINTFLAGS,
+
+    _CS_POSIX_V6_LP64_OFF64_CFLAGS,
+
+    _CS_POSIX_V6_LP64_OFF64_LDFLAGS,
+
+    _CS_POSIX_V6_LP64_OFF64_LIBS,
+
+    _CS_POSIX_V6_LP64_OFF64_LINTFLAGS,
+
+    _CS_POSIX_V6_LPBIG_OFFBIG_CFLAGS,
+
+    _CS_POSIX_V6_LPBIG_OFFBIG_LDFLAGS,
+
+    _CS_POSIX_V6_LPBIG_OFFBIG_LIBS,
+
+    _CS_POSIX_V6_LPBIG_OFFBIG_LINTFLAGS,
+
+
+    _CS_POSIX_V7_ILP32_OFF32_CFLAGS,
+
+    _CS_POSIX_V7_ILP32_OFF32_LDFLAGS,
+
+    _CS_POSIX_V7_ILP32_OFF32_LIBS,
+
+    _CS_POSIX_V7_ILP32_OFF32_LINTFLAGS,
+
+    _CS_POSIX_V7_ILP32_OFFBIG_CFLAGS,
+
+    _CS_POSIX_V7_ILP32_OFFBIG_LDFLAGS,
+
+    _CS_POSIX_V7_ILP32_OFFBIG_LIBS,
+
+    _CS_POSIX_V7_ILP32_OFFBIG_LINTFLAGS,
+
+    _CS_POSIX_V7_LP64_OFF64_CFLAGS,
+
+    _CS_POSIX_V7_LP64_OFF64_LDFLAGS,
+
+    _CS_POSIX_V7_LP64_OFF64_LIBS,
+
+    _CS_POSIX_V7_LP64_OFF64_LINTFLAGS,
+
+    _CS_POSIX_V7_LPBIG_OFFBIG_CFLAGS,
+
+    _CS_POSIX_V7_LPBIG_OFFBIG_LDFLAGS,
+
+    _CS_POSIX_V7_LPBIG_OFFBIG_LIBS,
+
+    _CS_POSIX_V7_LPBIG_OFFBIG_LINTFLAGS,
+
+
+    _CS_V6_ENV,
+
+    _CS_V7_ENV
+
+  };
+
+
+
+extern long int pathconf (__const char *__path, int __name)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+
+
+extern long int fpathconf (int __fd, int __name) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern long int sysconf (int __name) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+extern size_t confstr (int __name, char *__buf, size_t __len) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+extern __pid_t getpid (void) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern __pid_t getppid (void) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+extern __pid_t getpgrp (void) __attribute__ ((__nothrow__ , __leaf__));
+
+extern __pid_t __getpgid (__pid_t __pid) __attribute__ ((__nothrow__ , __leaf__));
+
+extern __pid_t getpgid (__pid_t __pid) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+
+
+extern int setpgid (__pid_t __pid, __pid_t __pgid) __attribute__ ((__nothrow__ , __leaf__));
+
+extern int setpgrp (void) __attribute__ ((__nothrow__ , __leaf__));
+
+extern __pid_t setsid (void) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+extern __pid_t getsid (__pid_t __pid) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+extern __uid_t getuid (void) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern __uid_t geteuid (void) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern __gid_t getgid (void) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern __gid_t getegid (void) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+extern int getgroups (int __size, __gid_t __list[]) __attribute__ ((__nothrow__ , __leaf__)) ;
+
+extern int setuid (__uid_t __uid) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+extern int setreuid (__uid_t __ruid, __uid_t __euid) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+extern int seteuid (__uid_t __uid) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+
+
+extern int setgid (__gid_t __gid) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+extern int setregid (__gid_t __rgid, __gid_t __egid) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+extern int setegid (__gid_t __gid) __attribute__ ((__nothrow__ , __leaf__));
+
+extern __pid_t fork (void) __attribute__ ((__nothrow__));
+
+
+
+
+
+
+
+extern __pid_t vfork (void) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+
+extern char *ttyname (int __fd) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+extern int ttyname_r (int __fd, char *__buf, size_t __buflen)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (2))) ;
+
+
+
+extern int isatty (int __fd) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+
+extern int ttyslot (void) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+extern int link (__const char *__from, __const char *__to)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2))) ;
+
+
+
+
+extern int linkat (int __fromfd, __const char *__from, int __tofd,
+     __const char *__to, int __flags)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (2, 4))) ;
+
+
+
+
+extern int symlink (__const char *__from, __const char *__to)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2))) ;
+
+
+
+
+extern ssize_t readlink (__const char *__restrict __path,
+    char *__restrict __buf, size_t __len)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2))) ;
+
+
+
+
+extern int symlinkat (__const char *__from, int __tofd,
+        __const char *__to) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 3))) ;
+
+
+extern ssize_t readlinkat (int __fd, __const char *__restrict __path,
+      char *__restrict __buf, size_t __len)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (2, 3))) ;
+
+
+
+extern int unlink (__const char *__name) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+extern int unlinkat (int __fd, __const char *__name, int __flag)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (2)));
+
+
+
+extern int rmdir (__const char *__path) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+extern __pid_t tcgetpgrp (int __fd) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern int tcsetpgrp (int __fd, __pid_t __pgrp_id) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+
+
+extern char *getlogin (void);
+
+
+
+
+
+
+
+extern int getlogin_r (char *__name, size_t __name_len) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+extern int setlogin (__const char *__name) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+extern char *optarg;
+
+extern int optind;
+
+
+
+
+extern int opterr;
+
+
+
+extern int optopt;
+
+extern int getopt (int ___argc, char *const *___argv, const char *__shortopts)
+       __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+
+
+
+
+extern int gethostname (char *__name, size_t __len) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+
+extern int sethostname (__const char *__name, size_t __len)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1))) ;
+
+
+
+extern int sethostid (long int __id) __attribute__ ((__nothrow__ , __leaf__)) ;
+
+
+
+
+
+extern int getdomainname (char *__name, size_t __len)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1))) ;
+extern int setdomainname (__const char *__name, size_t __len)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1))) ;
+
+
+
+
+
+extern int vhangup (void) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern int revoke (__const char *__file) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1))) ;
+
+
+
+
+
+
+
+extern int profil (unsigned short int *__sample_buffer, size_t __size,
+     size_t __offset, unsigned int __scale)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+extern int acct (__const char *__name) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+extern char *getusershell (void) __attribute__ ((__nothrow__ , __leaf__));
+extern void endusershell (void) __attribute__ ((__nothrow__ , __leaf__));
+extern void setusershell (void) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+
+extern int daemon (int __nochdir, int __noclose) __attribute__ ((__nothrow__ , __leaf__)) ;
+
+
+
+
+
+
+extern int chroot (__const char *__path) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1))) ;
+
+
+
+extern char *getpass (__const char *__prompt) __attribute__ ((__nonnull__ (1)));
+
+extern int fsync (int __fd);
+
+extern long int gethostid (void);
+
+
+extern void sync (void) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+
+extern int getpagesize (void) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
+
+
+
+
+extern int getdtablesize (void) __attribute__ ((__nothrow__ , __leaf__));
+
+extern int truncate (__const char *__file, __off_t __length)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1))) ;
+
+extern int ftruncate (int __fd, __off_t __length) __attribute__ ((__nothrow__ , __leaf__)) ;
+
+extern int brk (void *__addr) __attribute__ ((__nothrow__ , __leaf__)) ;
+
+
+
+
+
+extern void *sbrk (intptr_t __delta) __attribute__ ((__nothrow__ , __leaf__));
+
+extern long int syscall (long int __sysno, ...) __attribute__ ((__nothrow__ , __leaf__));
+
+extern int lockf (int __fd, int __cmd, __off_t __len) ;
+
+extern int fdatasync (int __fildes);
+
+extern char *ctermid (char *__s) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+
+
+
+typedef long int ptrdiff_t;
+
+
+
+
 typedef signed char s8;
 typedef unsigned char u8;
 
@@ -3139,208 +4321,19 @@ typedef _Bool bool;
 
 
 
-
-
-
-typedef struct {
- int counter;
-} atomic_t;
-
-static inline int atomic_read(const atomic_t *v)
-{
- return (*(volatile int *)&(v)->counter);
-}
-
-static inline void atomic_set(atomic_t *v, int i)
-{
- v->counter = i;
-}
-
-static inline void atomic_add(int i, atomic_t *v)
-{
- asm volatile("\n\tlock; " "addl %1,%0"
-       : "+m" (v->counter)
-       : "ir" (i));
-}
-
-static inline void atomic_sub(int i, atomic_t *v)
-{
- asm volatile("\n\tlock; " "subl %1,%0"
-       : "+m" (v->counter)
-       : "ir" (i));
-}
-
-static inline int atomic_sub_and_test(int i, atomic_t *v)
-{
- unsigned char c;
-
- asm volatile("\n\tlock; " "subl %2,%0; sete %1"
-       : "+m" (v->counter), "=qm" (c)
-       : "ir" (i) : "memory");
- return c;
-}
-
-static inline void atomic_inc(atomic_t *v)
-{
-  __VERIFIER_atomic_begin();
-  v->counter += 1;
-  __VERIFIER_atomic_end();
-}
-
-static inline void atomic_dec(atomic_t *v)
-{
- asm volatile("\n\tlock; " "decl %0"
-       : "+m" (v->counter));
-}
-
-static inline int atomic_dec_and_test(atomic_t *v)
-{
- unsigned char c;
-
- asm volatile("\n\tlock; " "decl %0; sete %1"
-       : "+m" (v->counter), "=qm" (c)
-       : : "memory");
- return c != 0;
-}
-
-static inline int atomic_inc_and_test(atomic_t *v)
-{
- unsigned char c;
-
- asm volatile("\n\tlock; " "incl %0; sete %1"
-       : "+m" (v->counter), "=qm" (c)
-       : : "memory");
- return c != 0;
-}
-
-static inline int atomic_add_negative(int i, atomic_t *v)
-{
- unsigned char c;
-
- asm volatile("\n\tlock; " "addl %2,%0; sets %1"
-       : "+m" (v->counter), "=qm" (c)
-       : "ir" (i) : "memory");
- return c;
-}
-
-static inline int atomic_add_return(int i, atomic_t *v)
-{
- return i + xadd(&v->counter, i);
-}
-
-static inline int atomic_sub_return(int i, atomic_t *v)
-{
- return atomic_add_return(-i, v);
-}
-
-
-
-
-static inline int atomic_cmpxchg(atomic_t *v, int old, int new)
-{
- return cmpxchg(&v->counter, old, new);
-}
-
-static inline int atomic_xchg(atomic_t *v, int new)
-{
- return xchg(&v->counter, new);
-}
-
-static inline int __atomic_add_unless(atomic_t *v, int a, int u)
-{
- int c, old;
- c = atomic_read(v);
- for (;;) {
-  if (unlikely(c == (u)))
-   break;
-  old = atomic_cmpxchg((v), c, c + (a));
-  if (likely(old == c))
-   break;
-  c = old;
- }
- return c;
-}
-
-static inline short int atomic_inc_short(short int *v)
-{
- asm("\n\tlock; " "addw $1, %0" : "+m" (*v));
- return *v;
-}
-
-
-
-
-
-
-
-extern void __xchg_wrong_size(void)
- __attribute__((error("Bad argument size for xchg")));
-extern void __cmpxchg_wrong_size(void)
- __attribute__((error("Bad argument size for cmpxchg")));
-extern void __xadd_wrong_size(void)
- __attribute__((error("Bad argument size for xadd")));
-extern void __add_wrong_size(void)
- __attribute__((error("Bad argument size for add")));
-
-
-
-static inline void set_64bit(volatile u64 *ptr, u64 value)
-{
- u32 low = value;
- u32 high = value >> 32;
- u64 prev = *ptr;
-
- asm volatile("\n1:\t"
-       "\n\tlock; " "cmpxchg8b %0\n\t"
-       "jnz 1b"
-       : "=m" (*ptr), "+A" (prev)
-       : "b" (low), "c" (high)
-       : "memory");
-}
-
-static inline u64 __cmpxchg64(volatile u64 *ptr, u64 old, u64 new)
-{
- u64 prev;
- asm volatile("\n\tlock; " "cmpxchg8b %1"
-       : "=A" (prev),
-         "+m" (*ptr)
-       : "b" ((u32)new),
-         "c" ((u32)(new >> 32)),
-         "0" (old)
-       : "memory");
- return prev;
-}
-
-static inline u64 __cmpxchg64_local(volatile u64 *ptr, u64 old, u64 new)
-{
- u64 prev;
- asm volatile("cmpxchg8b %1"
-       : "=A" (prev),
-         "+m" (*ptr)
-       : "b" ((u32)new),
-         "c" ((u32)(new >> 32)),
-         "0" (old)
-       : "memory");
- return prev;
-}
-
-
 void cpu_relax_poll(void)
 {
- poll(((void *)0), 0, 1);
 }
 
 void cpu_relax_poll_random(void)
 {
- if ((random() & 0xfff00) == 0)
-  poll(((void *)0), 0, 1);
 }
 
 void (*cpu_relax_func)(void) = cpu_relax_poll;
 
 
 
-int __thread my_smp_processor_id;
+int __thread my_smp_processor_id = -1;
 
 
 
@@ -3363,13 +4356,6 @@ struct irq_work {
  int a;
 };
 
-int __thread my_smp_processor_id;
-
-
-
-
-
-
 volatile unsigned long jiffies = 0;
 
 typedef int raw_spinlock_t;
@@ -3384,6 +4370,31 @@ struct list_head {
 
 
 
+
+
+
+typedef struct {
+ int counter;
+} atomic_t;
+
+static inline int atomic_read(const atomic_t *v)
+{
+ return (*(volatile int *)&(v)->counter);
+}
+
+static inline void atomic_set(atomic_t *v, int i)
+{
+ v->counter = i;
+}
+
+static inline void atomic_inc(atomic_t *v)
+{
+  __VERIFIER_atomic_begin();
+  v->counter++;
+  __VERIFIER_atomic_end();
+}
+
+
 typedef atomic_t atomic_long_t;
 typedef int wait_queue_head_t;
 
@@ -3395,7 +4406,9 @@ struct completion {
 };
 
 
-int nr_cpu_ids = 2;
+int __unbuffered_cnt = 0;
+
+int nr_cpu_ids = 3;
 int rcu_fanout_leaf = 8;
 
 
@@ -3518,7 +4531,7 @@ struct rcu_data {
 };
 
 struct rcu_state {
- struct rcu_node node[((1 + (2) + 0 + 0 + 0) - 2)];
+ struct rcu_node node[((1 + (3) + 0 + 0 + 0) - 3)];
  struct rcu_node *level[1];
  u32 levelcnt[4 + 1];
  u8 levelspread[1];
@@ -3604,68 +4617,16 @@ struct rcu_data;
 extern struct rcu_state rcu_bh_state;
 struct rcu_data;
 
-static void rcu_bootup_announce(void);
 long rcu_batches_completed(void);
-static void rcu_preempt_note_context_switch(int cpu);
-static int rcu_preempt_blocked_readers_cgp(struct rcu_node *rnp);
 
-
-
-
-static void rcu_print_detail_task_stall(struct rcu_state *rsp);
-static int rcu_print_task_stall(struct rcu_node *rnp);
-static void rcu_preempt_check_blocked_tasks(struct rcu_node *rnp);
-
-
-
-
-
-static void rcu_preempt_check_callbacks(int cpu);
 void call_rcu(struct rcu_head *head, void (*func)(struct rcu_head *rcu));
 
-
-
-
-static void __rcu_init_preempt(void);
-static void rcu_initiate_boost(struct rcu_node *rnp, unsigned long flags);
-static void rcu_preempt_boost_start_gp(struct rcu_node *rnp);
-static void invoke_rcu_callbacks_kthread(void);
-static bool rcu_is_callbacks_kthread(void);
-
-
-
-
-
-static void rcu_prepare_kthreads(int cpu);
-static void rcu_cleanup_after_idle(int cpu);
-static void rcu_prepare_for_idle(int cpu);
-static void rcu_idle_count_callbacks_posted(void);
-static void print_cpu_stall_info_begin(void);
-static void print_cpu_stall_info(struct rcu_state *rsp, int cpu);
-static void print_cpu_stall_info_end(void);
-static void zero_cpu_stall_ticks(struct rcu_data *rdp);
-static void increment_cpu_stall_ticks(void);
-static int rcu_nocb_needs_gp(struct rcu_state *rsp);
-static void rcu_nocb_gp_set(struct rcu_node *rnp, int nrq);
-static void rcu_nocb_gp_cleanup(struct rcu_state *rsp, struct rcu_node *rnp);
-static void rcu_init_one_nocb(struct rcu_node *rnp);
-static bool __call_rcu_nocb(struct rcu_data *rdp, struct rcu_head *rhp,
-       bool lazy);
-static bool rcu_nocb_adopt_orphan_cbs(struct rcu_state *rsp,
-          struct rcu_data *rdp);
-static void rcu_boot_init_nocb_percpu_data(struct rcu_data *rdp);
-static void rcu_spawn_nocb_kthreads(struct rcu_state *rsp);
 static void rcu_kick_nohz_cpu(int cpu);
-static bool init_nocb_callback_list(struct rcu_data *rdp);
+
 static void rcu_sysidle_enter(struct rcu_dynticks *rdtp, int irq);
 static void rcu_sysidle_exit(struct rcu_dynticks *rdtp, int irq);
 static void rcu_sysidle_check_cpu(struct rcu_data *rdp, bool *isidle,
       unsigned long *maxj);
-static bool is_sysidle_rcu_state(struct rcu_state *rsp);
-static void rcu_sysidle_report_gp(struct rcu_state *rsp, int isidle,
-      unsigned long maxj);
-static void rcu_bind_gp_kthread(void);
-static void rcu_sysidle_init_percpu_data(struct rcu_dynticks *rdtp);
 
 
 struct rcu_state rcu_preempt_state;
@@ -3727,9 +4688,9 @@ static void rcu_sysidle_enter(struct rcu_dynticks *rdtp, int irq)
 
  j = jiffies;
  (*(volatile typeof(rdtp->dynticks_idle_jiffies) *)&(rdtp->dynticks_idle_jiffies)) = j;
- __asm__ __volatile__("": : :"memory");
+ ;
  atomic_inc(&rdtp->dynticks_idle);
- __asm__ __volatile__("": : :"memory");
+ ;
  ({ int __c = (atomic_read(&rdtp->dynticks_idle) & 0x1); if (__c) abort(); atomic_read(&rdtp->dynticks_idle) & 0x1; });
 }
 
@@ -3744,7 +4705,7 @@ void rcu_sysidle_force_exit(void)
 
 
  while (oldstate > 1) {
-  newoldstate = ({ if ("\n\tlock; "[0] != '\0') { __VERIFIER_atomic_begin(); } if ((*(&full_sysidle_state)) == (oldstate)) { (*(&full_sysidle_state)) = (0); } if ("\n\tlock; "[0] != '\0') { __VERIFIER_atomic_end(); } (*(&full_sysidle_state)); })
+  newoldstate = __sync_val_compare_and_swap((&full_sysidle_state), (oldstate), (0))
                                     ;
   if (oldstate == newoldstate &&
       oldstate == 4) {
@@ -3753,7 +4714,7 @@ void rcu_sysidle_force_exit(void)
   }
   oldstate = newoldstate;
  }
- asm volatile("mfence":::"memory");
+ ;
 }
 
 
@@ -3785,9 +4746,9 @@ static void rcu_sysidle_exit(struct rcu_dynticks *rdtp, int irq)
  }
 
 
- __asm__ __volatile__("": : :"memory");
+ ;
  atomic_inc(&rdtp->dynticks_idle);
- __asm__ __volatile__("": : :"memory");
+ ;
  ({ int __c = (!(atomic_read(&rdtp->dynticks_idle) & 0x1)); if (__c) abort(); !(atomic_read(&rdtp->dynticks_idle) & 0x1); });
 
  if (my_smp_processor_id == tick_do_timer_cpu)
@@ -3825,35 +4786,13 @@ static void rcu_sysidle_check_cpu(struct rcu_data *rdp, bool *isidle,
   *isidle = 0;
   return;
  }
- asm volatile("mfence":::"memory");
+ ;
 
 
  j = (*(volatile typeof(rdtp->dynticks_idle_jiffies) *)&(rdtp->dynticks_idle_jiffies));
 
  if (((~0UL) / 2 < (*maxj) - (j)))
   *maxj = j;
-}
-
-
-
-
-static bool is_sysidle_rcu_state(struct rcu_state *rsp)
-{
- return rsp == rcu_sysidle_state;
-}
-
-
-
-
-
-static void rcu_bind_gp_kthread(void)
-{
- int cpu = (*(volatile typeof(tick_do_timer_cpu) *)&(tick_do_timer_cpu));
-
- if (cpu < 0 || cpu >= nr_cpu_ids)
-  return;
- if (my_smp_processor_id != cpu)
-  do { } while (0);
 }
 
 static unsigned long rcu_sysidle_delay(void)
@@ -3884,7 +4823,7 @@ static void rcu_sysidle(unsigned long j)
 
 
   if (((~0UL) / 2 >= (jiffies) - (j + rcu_sysidle_delay())))
-   (void)({ if ("\n\tlock; "[0] != '\0') { __VERIFIER_atomic_begin(); } if ((*(&full_sysidle_state)) == (1)) { (*(&full_sysidle_state)) = (2); } if ("\n\tlock; "[0] != '\0') { __VERIFIER_atomic_end(); } (*(&full_sysidle_state)); })
+   (void)__sync_val_compare_and_swap((&full_sysidle_state), (1), (2))
                                               ;
   break;
 
@@ -3895,7 +4834,7 @@ static void rcu_sysidle(unsigned long j)
 
 
   if (((~0UL) / 2 >= (jiffies) - (j + rcu_sysidle_delay())))
-   (void)({ if ("\n\tlock; "[0] != '\0') { __VERIFIER_atomic_begin(); } if ((*(&full_sysidle_state)) == (2)) { (*(&full_sysidle_state)) = (3); } if ("\n\tlock; "[0] != '\0') { __VERIFIER_atomic_end(); } (*(&full_sysidle_state)); })
+   (void)__sync_val_compare_and_swap((&full_sysidle_state), (2), (3))
                                              ;
   break;
 
@@ -3910,7 +4849,7 @@ static void rcu_sysidle(unsigned long j)
 
 static void rcu_sysidle_cancel(void)
 {
- asm volatile("mfence":::"memory");
+ ;
  (*(volatile typeof(full_sysidle_state) *)&(full_sysidle_state)) = 0;
 }
 
@@ -3931,17 +4870,6 @@ static void rcu_sysidle_report(struct rcu_state *rsp, int isidle,
   rcu_sysidle_cancel();
 }
 
-
-
-
-
-static void rcu_sysidle_report_gp(struct rcu_state *rsp, int isidle,
-      unsigned long maxj)
-{
- rcu_sysidle_report(rsp, isidle, maxj, 1);
-}
-
-
 struct rcu_sysidle_head {
  struct rcu_head rh;
  int inuse;
@@ -3956,9 +4884,9 @@ static void rcu_sysidle_cb(struct rcu_head *rhp)
 
 
 
- asm volatile("mfence":::"memory");
+ ;
 
- rshp = ({ const typeof( ((struct rcu_sysidle_head *)0)->rh ) *__mptr = (rhp); (struct rcu_sysidle_head *)( (char *)__mptr - ((size_t) &((struct rcu_sysidle_head *)0)->rh) );});
+ rshp = ({ const typeof( ((struct rcu_sysidle_head *)0)->rh ) *__mptr = (rhp); (struct rcu_sysidle_head *)( (char *)__mptr - __builtin_offsetof (struct rcu_sysidle_head, rh) );});
  (*(volatile typeof(rshp->inuse) *)&(rshp->inuse)) = 0;
 }
 
@@ -4004,12 +4932,12 @@ bool rcu_sys_is_idle(void)
 
 
  if (rss == 3) {
-  rss = ({ if ("\n\tlock; "[0] != '\0') { __VERIFIER_atomic_begin(); } if ((*(&full_sysidle_state)) == (3)) { (*(&full_sysidle_state)) = (4); } if ("\n\tlock; "[0] != '\0') { __VERIFIER_atomic_end(); } (*(&full_sysidle_state)); })
+  rss = __sync_val_compare_and_swap((&full_sysidle_state), (3), (4))
                                                   ;
   return rss == 3;
  }
 
- asm volatile("mfence":::"memory");
+ ;
 
 
  if (rss == 4)
@@ -4017,22 +4945,13 @@ bool rcu_sys_is_idle(void)
 
  if (nr_cpu_ids > 4 &&
      !rcu_gp_in_progress(rcu_sysidle_state) &&
-     !rsh.inuse && ({ __VERIFIER_atomic_begin(); int temp = (*(&rsh.inuse)); (*(&rsh.inuse)) = (1); __VERIFIER_atomic_end(); temp;}) == 0)
+     !rsh.inuse && ({ __VERIFIER_atomic_begin(); int temp = (*&rsh.inuse); (*&rsh.inuse) = 1; __VERIFIER_atomic_end(); temp; }) == 0)
   call_rcu(&rsh.rh, rcu_sysidle_cb);
  return 0;
 }
 
 
-
-
-static void rcu_sysidle_init_percpu_data(struct rcu_dynticks *rdtp)
-{
- rdtp->dynticks_idle_nesting = ((((long long)(~0ULL>>1)) >> 7) + 1);
-}
-
-
-int goflag = 1;
-int nthreads = 2;
+int nthreads = 3;
 
 struct thread_arg {
  int me;
@@ -4052,8 +4971,6 @@ void do_fqs(struct rcu_state *rsp, struct rcu_data *rdp_in)
  maxj = jiffies - (~0UL) / 4;
  for (i = 0; i < nthreads; i++) {
   rdp = &rdp_in[i];
-  if ((random() & 0xff) == 0)
-   poll(((void *)0), 0, 20);
   rcu_sysidle_check_cpu(rdp, &isidle, &maxj);
  }
  old_full_sysidle_state = (*(volatile typeof(full_sysidle_state) *)&(full_sysidle_state));
@@ -4064,10 +4981,6 @@ void do_fqs(struct rcu_state *rsp, struct rcu_data *rdp_in)
          jiffies,
          old_full_sysidle_state, new_full_sysidle_state);
  old_full_sysidle_state = (*(volatile typeof(full_sysidle_state) *)&(full_sysidle_state));
- if (old_full_sysidle_state == 3)
-  poll(((void *)0), 0, 5);
- else
-  poll(((void *)0), 0, 1);
  if (rcu_sys_is_idle() &&
      old_full_sysidle_state != 4) {
   printf("%lu: System fully idle\n", jiffies);
@@ -4087,50 +5000,47 @@ void *timekeeping_cpu(void *arg)
  struct thread_arg *tap = (struct thread_arg *)arg;
 
  my_smp_processor_id = tap->me;
- while ((*(volatile typeof(goflag) *)&(goflag))) {
+ for (i = 0; i < 5; i++) {
   jiffies++;
 
 
   do_fqs(&rcu_preempt_state, rcu_preempt_data_array);
-  do_fqs(&rcu_sched_state, rcu_sched_data_array);
+
  }
+
+
+ __unbuffered_cnt++;
+ return ((void *)0);
 }
 
 void *other_cpu(void *arg)
 {
+ int i;
  int nest;
  struct rcu_dynticks *rdtp;
  struct thread_arg *tap = (struct thread_arg *)arg;
 
  my_smp_processor_id = tap->me;
  rdtp = &rcu_dynticks_array[tap->me];
- while ((*(volatile typeof(goflag) *)&(goflag))) {
+ for (i = 0; i < 5; i++) {
 
   ({ int __c = (full_sysidle_state > 2); if (__c) abort(); full_sysidle_state > 2; });
-  poll(((void *)0), 0, random() % 10 + 1);
   ({ int __c = (full_sysidle_state > 2); if (__c) abort(); full_sysidle_state > 2; });
 
 
   rcu_sysidle_enter(rdtp, 0);
-  poll(((void *)0), 0, 1);
 
 
-  nest = 0;
-  while (random() & 0x100) {
-   rcu_sysidle_exit(rdtp, 1);
-   nest++;
-  }
-  poll(((void *)0), 0, 1);
-  while (nest-- > 0) {
-   rcu_sysidle_enter(rdtp, 1);
-  }
-
-
-  poll(((void *)0), 0, random() % 100 + 1);
+  rcu_sysidle_exit(rdtp, 1);
+  rcu_sysidle_enter(rdtp, 1);
 
 
   rcu_sysidle_exit(rdtp, 0);
  }
+
+
+ __unbuffered_cnt++;
+ return ((void *)0);
 }
 
 int main(int argc, char *argv[])
@@ -4138,13 +5048,6 @@ int main(int argc, char *argv[])
  int i;
  struct thread_arg *ta_array;
  pthread_t *tids;
-
-
- if (argc > 1) {
-  nr_cpu_ids = atoi(argv[1]);
-  nthreads = nr_cpu_ids;
-  printf("nr_cpu_ids set to %d\n", nr_cpu_ids);
- }
 
 
  rcu_preempt_data_array =
@@ -4175,15 +5078,15 @@ int main(int argc, char *argv[])
  }
  rcu_preempt_state.rda = rcu_preempt_data_array;
  rcu_sched_state.rda = rcu_sched_data_array;
- srandom(time(((void *)0)));
+
 
  printf("Start stress test.\n");
  pthread_create(&tids[0], ((void *)0), timekeeping_cpu, &ta_array[0]);
  for (i = 1; i < nthreads; i++) {
   pthread_create(&tids[i], ((void *)0), other_cpu, &ta_array[i]);
  }
- sleep(10);
- (*(volatile typeof(goflag) *)&(goflag)) = 0;
+
+
  for (i = 0; i < nthreads; i++) {
   void *junk;
 
@@ -4194,9 +5097,12 @@ int main(int argc, char *argv[])
  }
  printf("End of stress test.\n");
 
+
  if (full_sysidle_state == 4 ||
      (atomic_read(&rcu_preempt_data_array[1].dynticks->dynticks_idle) & 0x1) == 1 ||
      (atomic_read(&rcu_preempt_data_array[2].dynticks->dynticks_idle) & 0x1) == 1) {
    __VERIFIER_error();
  }
+
+ return 0;
 }

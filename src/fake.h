@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stddef.h> /* ADDED MISSING INCLUDE */
 
 /* 32-bit build. */
 
@@ -39,24 +40,22 @@ typedef _Bool                   bool;
 
 #define LOCK_PREFIX "\n\tlock; "
 
-// Unlikely and likely relocated here to be defined when atomic.h is included
-#define likely(x) (x)
-#define unlikely(x) (x)
-#include "atomic.h"
+/* MOVED TO LINE <> */
+/* #include "atomic.h" */
 
 /*
  * Non-existant functions to indicate usage errors at link time
  * (or compile-time if the compiler implements __compiletime_error().
  */
-#define __compiletime_error(message) __attribute__((error(message)))
-extern void __xchg_wrong_size(void)
-	__compiletime_error("Bad argument size for xchg");
-extern void __cmpxchg_wrong_size(void)
-	__compiletime_error("Bad argument size for cmpxchg");
-extern void __xadd_wrong_size(void)
-	__compiletime_error("Bad argument size for xadd");
-extern void __add_wrong_size(void)
-	__compiletime_error("Bad argument size for add");
+/* UNUSED #define __compiletime_error(message) __attribute__((error(message))) */
+/* UNUSED extern void __xchg_wrong_size(void) */
+/* UNUSED 	__compiletime_error("Bad argument size for xchg"); */
+/* UNUSED extern void __cmpxchg_wrong_size(void) */
+/* UNUSED 	__compiletime_error("Bad argument size for cmpxchg"); */
+/* UNUSED extern void __xadd_wrong_size(void) */
+/* UNUSED 	__compiletime_error("Bad argument size for xadd"); */
+/* UNUSED extern void __add_wrong_size(void) */
+/* UNUSED 	__compiletime_error("Bad argument size for add"); */
 
 /*
  * Constants for operation sizes. On 32-bit, the 64-bit size it set to
@@ -78,46 +77,49 @@ extern void __add_wrong_size(void)
  * An exchange-type operation, which takes a value and a pointer, and
  * returns a the old value.
  */
-// Begin SVCOMP Model
-#define __xchg_op(ptr, arg, op, lock)					\
-  ({ \
-  __VERIFIER_atomic_begin(); \
-  int temp = (*ptr); \
-  (*ptr) = arg; \
-  __VERIFIER_atomic_end(); \
-  temp;\
-}) 
-// End SVCOMP Model
-
-/* #define __xchg_op(ptr, arg, op, lock)					\ */
-/* 	({								\ */
-/* 	        __typeof__ (*(ptr)) __ret = (arg);			\ */
-/* 		switch (sizeof(*(ptr))) {				\ */
-/* 		case __X86_CASE_B:					\ */
-/* 			asm volatile (lock #op "b %b0, %1\n"		\ */
-/* 				      : "+q" (__ret), "+m" (*(ptr))	\ */
-/* 				      : : "memory", "cc");		\ */
-/* 			break;						\ */
-/* 		case __X86_CASE_W:					\ */
-/* 			asm volatile (lock #op "w %w0, %1\n"		\ */
-/* 				      : "+r" (__ret), "+m" (*(ptr))	\ */
-/* 				      : : "memory", "cc");		\ */
-/* 			break;						\ */
-/* 		case __X86_CASE_L:					\ */
-/* 			asm volatile (lock #op "l %0, %1\n"		\ */
-/* 				      : "+r" (__ret), "+m" (*(ptr))	\ */
-/* 				      : : "memory", "cc");		\ */
-/* 			break;						\ */
-/* 		case __X86_CASE_Q:					\ */
-/* 			asm volatile (lock #op "q %q0, %1\n"		\ */
-/* 				      : "+r" (__ret), "+m" (*(ptr))	\ */
-/* 				      : : "memory", "cc");		\ */
-/* 			break;						\ */
-/* 		default:						\ */
-/* 			__ ## op ## _wrong_size();			\ */
-/* 		}							\ */
-/* 		__ret;							\ */
-/* 	}) */
+#define __xchg_op(ptr, arg, op, lock)		\
+  ({						\
+    if (lock[0] != '\0') {			\
+      __VERIFIER_atomic_begin();		\
+    }						\
+    typeof(*ptr) temp = (*ptr);			\
+    (*ptr) = arg;				\
+    if (lock[0] != '\0') {			\
+      __VERIFIER_atomic_end();			\
+    }						\
+    temp;					\
+  }) 
+/************************************************************************************/
+/* #define __xchg_op(ptr, arg, op, lock)					\   */
+/* 	({								\	    */
+/* 	        __typeof__ (*(ptr)) __ret = (arg);			\	    */
+/* 		switch (sizeof(*(ptr))) {				\	    */
+/* 		case __X86_CASE_B:					\	    */
+/* 			asm volatile (lock #op "b %b0, %1\n"		\	    */
+/* 				      : "+q" (__ret), "+m" (*(ptr))	\	    */
+/* 				      : : "memory", "cc");		\	    */
+/* 			break;						\	    */
+/* 		case __X86_CASE_W:					\	    */
+/* 			asm volatile (lock #op "w %w0, %1\n"		\	    */
+/* 				      : "+r" (__ret), "+m" (*(ptr))	\	    */
+/* 				      : : "memory", "cc");		\	    */
+/* 			break;						\	    */
+/* 		case __X86_CASE_L:					\	    */
+/* 			asm volatile (lock #op "l %0, %1\n"		\	    */
+/* 				      : "+r" (__ret), "+m" (*(ptr))	\	    */
+/* 				      : : "memory", "cc");		\	    */
+/* 			break;						\	    */
+/* 		case __X86_CASE_Q:					\	    */
+/* 			asm volatile (lock #op "q %q0, %1\n"		\	    */
+/* 				      : "+r" (__ret), "+m" (*(ptr))	\	    */
+/* 				      : : "memory", "cc");		\	    */
+/* 			break;						\	    */
+/* 		default:						\	    */
+/* 			__ ## op ## _wrong_size();			\	    */
+/* 		}							\	    */
+/* 		__ret;							\	    */
+/* 	})									    */
+/************************************************************************************/
 
 /*
  * Note: no "lock" prefix even on SMP: xchg always implies lock anyway.
@@ -125,77 +127,76 @@ extern void __add_wrong_size(void)
  * use "asm volatile" and "memory" clobbers to prevent gcc from moving
  * information around.
  */
-#define xchg(ptr, v)  __xchg_op((ptr), (v), xchg, "")
-
+#define xchg(ptr, v)	__xchg_op((ptr), (v), xchg, "")
 
 /*
  * Atomic compare and exchange.  Compare OLD with MEM, if identical,
  * store NEW in MEM.  Return the initial value in MEM.  Success is
  * indicated by comparing RETURN with OLD.
  */
-// Begin SVCOMP Model
-#define __raw_cmpxchg(ptr, old, new, size, lock)			\
-  ({									\
-    if (lock[0] != '\0') {						\
-      __VERIFIER_atomic_begin();					\
-    }									\
-    if ((*ptr) == old) {						\
-      (*ptr) = new;							\
-    }									\
-    if (lock[0] != '\0') {						\
-      __VERIFIER_atomic_end();						\
-    }									\
-    (*ptr);								\
+#define __raw_cmpxchg(ptr, old, new, size, lock)	\
+  ({							\
+    if (lock[0] != '\0') {				\
+      __VERIFIER_atomic_begin();			\
+    }							\
+    typeof(*ptr) temp = (*ptr);				\
+    if ((*ptr) == old) {				\
+      (*ptr) = new;					\
+    }							\
+    if (lock[0] != '\0') {				\
+      __VERIFIER_atomic_end();				\
+    }							\
+    temp;						\
   })
-// End SVCOMP Model
-
-/* #define __raw_cmpxchg(ptr, old, new, size, lock)			\ */
-/* ({									\ */
-/* 	__typeof__(*(ptr)) __ret;					\ */
-/* 	__typeof__(*(ptr)) __old = (old);				\ */
-/* 	__typeof__(*(ptr)) __new = (new);				\ */
-/* 	switch (size) {							\ */
-/* 	case __X86_CASE_B:						\ */
-/* 	{								\ */
-/* 		volatile u8 *__ptr = (volatile u8 *)(ptr);		\ */
-/* 		asm volatile(lock "cmpxchgb %2,%1"			\ */
-/* 			     : "=a" (__ret), "+m" (*__ptr)		\ */
-/* 			     : "q" (__new), "0" (__old)			\ */
-/* 			     : "memory");				\ */
-/* 		break;							\ */
-/* 	}								\ */
-/* 	case __X86_CASE_W:						\ */
-/* 	{								\ */
-/* 		volatile u16 *__ptr = (volatile u16 *)(ptr);		\ */
-/* 		asm volatile(lock "cmpxchgw %2,%1"			\ */
-/* 			     : "=a" (__ret), "+m" (*__ptr)		\ */
-/* 			     : "r" (__new), "0" (__old)			\ */
-/* 			     : "memory");				\ */
-/* 		break;							\ */
-/* 	}								\ */
-/* 	case __X86_CASE_L:						\ */
-/* 	{								\ */
-/* 		volatile u32 *__ptr = (volatile u32 *)(ptr);		\ */
-/* 		asm volatile(lock "cmpxchgl %2,%1"			\ */
-/* 			     : "=a" (__ret), "+m" (*__ptr)		\ */
-/* 			     : "r" (__new), "0" (__old)			\ */
-/* 			     : "memory");				\ */
-/* 		break;							\ */
-/* 	}								\ */
-/* 	case __X86_CASE_Q:						\ */
-/* 	{								\ */
-/* 		volatile u64 *__ptr = (volatile u64 *)(ptr);		\ */
-/* 		asm volatile(lock "cmpxchgq %2,%1"			\ */
-/* 			     : "=a" (__ret), "+m" (*__ptr)		\ */
-/* 			     : "r" (__new), "0" (__old)			\ */
-/* 			     : "memory");				\ */
-/* 		break;							\ */
-/* 	}								\ */
-/* 	default:							\ */
-/* 		__cmpxchg_wrong_size();					\ */
-/* 	}								\ */
-/* 	__ret;								\ */
-/* }) */
+/************************************************************************************/
+/* #define __raw_cmpxchg(ptr, old, new, size, lock)			\	    */
+/* ({									\	    */
+/* 	__typeof__(*(ptr)) __ret;					\	    */
+/* 	__typeof__(*(ptr)) __old = (old);				\	    */
+/* 	__typeof__(*(ptr)) __new = (new);				\	    */
+/* 	switch (size) {							\	    */
+/* 	case __X86_CASE_B:						\	    */
+/* 	{								\	    */
+/* 		volatile u8 *__ptr = (volatile u8 *)(ptr);		\	    */
+/* 		asm volatile(lock "cmpxchgb %2,%1"			\	    */
+/* 			     : "=a" (__ret), "+m" (*__ptr)		\	    */
+/* 			     : "q" (__new), "0" (__old)			\	    */
+/* 			     : "memory");				\	    */
+/* 		break;							\	    */
+/* 	}								\	    */
+/* 	case __X86_CASE_W:						\	    */
+/* 	{								\	    */
+/* 		volatile u16 *__ptr = (volatile u16 *)(ptr);		\	    */
+/* 		asm volatile(lock "cmpxchgw %2,%1"			\	    */
+/* 			     : "=a" (__ret), "+m" (*__ptr)		\	    */
+/* 			     : "r" (__new), "0" (__old)			\	    */
+/* 			     : "memory");				\	    */
+/* 		break;							\	    */
+/* 	}								\	    */
+/* 	case __X86_CASE_L:						\	    */
+/* 	{								\	    */
+/* 		volatile u32 *__ptr = (volatile u32 *)(ptr);		\	    */
+/* 		asm volatile(lock "cmpxchgl %2,%1"			\	    */
+/* 			     : "=a" (__ret), "+m" (*__ptr)		\	    */
+/* 			     : "r" (__new), "0" (__old)			\	    */
+/* 			     : "memory");				\	    */
+/* 		break;							\	    */
+/* 	}								\	    */
+/* 	case __X86_CASE_Q:						\	    */
+/* 	{								\	    */
+/* 		volatile u64 *__ptr = (volatile u64 *)(ptr);		\	    */
+/* 		asm volatile(lock "cmpxchgq %2,%1"			\	    */
+/* 			     : "=a" (__ret), "+m" (*__ptr)		\	    */
+/* 			     : "r" (__new), "0" (__old)			\	    */
+/* 			     : "memory");				\	    */
+/* 		break;							\	    */
+/* 	}								\	    */
+/* 	default:							\	    */
+/* 		__cmpxchg_wrong_size();					\	    */
+/* 	}								\	    */
+/* 	__ret;								\	    */
+/* })										    */
+/************************************************************************************/
 
 #define __cmpxchg(ptr, old, new, size)					\
 	__raw_cmpxchg((ptr), (old), (new), (size), LOCK_PREFIX)
@@ -232,35 +233,35 @@ extern void __add_wrong_size(void)
 #define xadd_sync(ptr, inc)	__xadd((ptr), (inc), "lock; ")
 #define xadd_local(ptr, inc)	__xadd((ptr), (inc), "")
 
-#define __add(ptr, inc, lock)						\
-	({								\
-	        __typeof__ (*(ptr)) __ret = (inc);			\
-		switch (sizeof(*(ptr))) {				\
-		case __X86_CASE_B:					\
-			asm volatile (lock "addb %b1, %0\n"		\
-				      : "+m" (*(ptr)) : "qi" (inc)	\
-				      : "memory", "cc");		\
-			break;						\
-		case __X86_CASE_W:					\
-			asm volatile (lock "addw %w1, %0\n"		\
-				      : "+m" (*(ptr)) : "ri" (inc)	\
-				      : "memory", "cc");		\
-			break;						\
-		case __X86_CASE_L:					\
-			asm volatile (lock "addl %1, %0\n"		\
-				      : "+m" (*(ptr)) : "ri" (inc)	\
-				      : "memory", "cc");		\
-			break;						\
-		case __X86_CASE_Q:					\
-			asm volatile (lock "addq %1, %0\n"		\
-				      : "+m" (*(ptr)) : "ri" (inc)	\
-				      : "memory", "cc");		\
-			break;						\
-		default:						\
-			__add_wrong_size();				\
-		}							\
-		__ret;							\
-	})
+/* UNUSED #define __add(ptr, inc, lock)						\ */
+/* UNUSED 	({								\ */
+/* UNUSED 	        __typeof__ (*(ptr)) __ret = (inc);			\ */
+/* UNUSED 		switch (sizeof(*(ptr))) {				\ */
+/* UNUSED 		case __X86_CASE_B:					\ */
+/* UNUSED 			asm volatile (lock "addb %b1, %0\n"		\ */
+/* UNUSED 				      : "+m" (*(ptr)) : "qi" (inc)	\ */
+/* UNUSED 				      : "memory", "cc");		\ */
+/* UNUSED 			break;						\ */
+/* UNUSED 		case __X86_CASE_W:					\ */
+/* UNUSED 			asm volatile (lock "addw %w1, %0\n"		\ */
+/* UNUSED 				      : "+m" (*(ptr)) : "ri" (inc)	\ */
+/* UNUSED 				      : "memory", "cc");		\ */
+/* UNUSED 			break;						\ */
+/* UNUSED 		case __X86_CASE_L:					\ */
+/* UNUSED 			asm volatile (lock "addl %1, %0\n"		\ */
+/* UNUSED 				      : "+m" (*(ptr)) : "ri" (inc)	\ */
+/* UNUSED 				      : "memory", "cc");		\ */
+/* UNUSED 			break;						\ */
+/* UNUSED 		case __X86_CASE_Q:					\ */
+/* UNUSED 			asm volatile (lock "addq %1, %0\n"		\ */
+/* UNUSED 				      : "+m" (*(ptr)) : "ri" (inc)	\ */
+/* UNUSED 				      : "memory", "cc");		\ */
+/* UNUSED 			break;						\ */
+/* UNUSED 		default:						\ */
+/* UNUSED 			__add_wrong_size();				\ */
+/* UNUSED 		}							\ */
+/* UNUSED 		__ret;							\ */
+/* UNUSED 	}) */
 
 /*
  * add_*() adds "inc" to "*ptr"
@@ -272,22 +273,22 @@ extern void __add_wrong_size(void)
 #define add_smp(ptr, inc)	__add((ptr), (inc), LOCK_PREFIX)
 #define add_sync(ptr, inc)	__add((ptr), (inc), "lock; ")
 
-#define __cmpxchg_double(pfx, p1, p2, o1, o2, n1, n2)			\
-({									\
-	bool __ret;							\
-	__typeof__(*(p1)) __old1 = (o1), __new1 = (n1);			\
-	__typeof__(*(p2)) __old2 = (o2), __new2 = (n2);			\
-	BUILD_BUG_ON(sizeof(*(p1)) != sizeof(long));			\
-	BUILD_BUG_ON(sizeof(*(p2)) != sizeof(long));			\
-	VM_BUG_ON((unsigned long)(p1) % (2 * sizeof(long)));		\
-	VM_BUG_ON((unsigned long)((p1) + 1) != (unsigned long)(p2));	\
-	asm volatile(pfx "cmpxchg%c4b %2; sete %0"			\
-		     : "=a" (__ret), "+d" (__old2),			\
-		       "+m" (*(p1)), "+m" (*(p2))			\
-		     : "i" (2 * sizeof(long)), "a" (__old1),		\
-		       "b" (__new1), "c" (__new2));			\
-	__ret;								\
-})
+/* UNUSED #define __cmpxchg_double(pfx, p1, p2, o1, o2, n1, n2)			\ */
+/* UNUSED ({									\ */
+/* UNUSED 	bool __ret;							\ */
+/* UNUSED 	__typeof__(*(p1)) __old1 = (o1), __new1 = (n1);			\ */
+/* UNUSED 	__typeof__(*(p2)) __old2 = (o2), __new2 = (n2);			\ */
+/* UNUSED 	BUILD_BUG_ON(sizeof(*(p1)) != sizeof(long));			\ */
+/* UNUSED 	BUILD_BUG_ON(sizeof(*(p2)) != sizeof(long));			\ */
+/* UNUSED 	VM_BUG_ON((unsigned long)(p1) % (2 * sizeof(long)));		\ */
+/* UNUSED 	VM_BUG_ON((unsigned long)((p1) + 1) != (unsigned long)(p2));	\ */
+/* UNUSED 	asm volatile(pfx "cmpxchg%c4b %2; sete %0"			\ */
+/* UNUSED 		     : "=a" (__ret), "+d" (__old2),			\ */
+/* UNUSED 		       "+m" (*(p1)), "+m" (*(p2))			\ */
+/* UNUSED 		     : "i" (2 * sizeof(long)), "a" (__old1),		\ */
+/* UNUSED 		       "b" (__new1), "c" (__new2));			\ */
+/* UNUSED 	__ret;								\ */
+/* UNUSED }) */
 
 #define cmpxchg_double(p1, p2, o1, o2, n1, n2) \
 	__cmpxchg_double(LOCK_PREFIX, p1, p2, o1, o2, n1, n2)
@@ -295,11 +296,14 @@ extern void __add_wrong_size(void)
 #define cmpxchg_double_local(p1, p2, o1, o2, n1, n2) \
 	__cmpxchg_double(, p1, p2, o1, o2, n1, n2)
 
-#define barrier() __asm__ __volatile__("": : :"memory")
+/* WEAK MEMORY MODEL NOT USED IN SVCOMP */
+#define barrier() /* __asm__ __volatile__("": : :"memory") */
 #define ACCESS_ONCE(x) (*(volatile typeof(x) *)&(x))
-#define smp_mb() asm volatile("mfence":::"memory")
+/* WEAK MEMORY MODEL NOT USED IN SVCOMP */
+#define smp_mb() /* asm volatile("mfence":::"memory") */
 
-// atomic.h needs likely and unlikely, so moved before atomic.h include
+#define likely(x) (x)
+#define unlikely(x) (x)
 
 void cpu_relax_poll(void)
 {
@@ -316,7 +320,7 @@ void (*cpu_relax_func)(void) = cpu_relax_poll;
 
 #define cpu_relax() cpu_relax_func()
 
-int __thread my_smp_processor_id;
+int __thread my_smp_processor_id = -1;
 
 #define raw_smp_processor_id() my_smp_processor_id
 
@@ -336,7 +340,7 @@ static inline void cpu_init(int cpu)
 			abort(); \
 	} while (0)
 
-#define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
+/* UNDEFINED CODE #define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER) */
 
 /**
  * container_of - cast a member of a structure out to the containing structure
@@ -374,9 +378,9 @@ struct irq_work {
 	int a;
 };
 
-int __thread my_smp_processor_id;
+/* int __thread my_smp_processor_id; */
 
-#define raw_smp_processor_id() my_smp_processor_id
+/* #define raw_smp_processor_id() my_smp_processor_id */
 #define smp_processor_id() my_smp_processor_id
 
 #define WARN_ON_ONCE(c) ({ int __c = (c);  if (__c) abort(); c; })
@@ -394,6 +398,9 @@ struct list_head {
 #define __percpu
 #define __init
 #define __cpuinit
+
+/* MOVED FROM LINE <> */
+#include "atomic.h"
 
 typedef atomic_t atomic_long_t;
 typedef int wait_queue_head_t;

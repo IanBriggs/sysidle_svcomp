@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stddef.h> /* ADDED MISSING INCLUDE */
 
 /* 32-bit build. */
 
@@ -37,7 +38,11 @@ typedef _Bool                   bool;
 #define false 0
 #define true  1
 
-#include "atomic_sat.h"
+/* ADDED MISSING DEFINE */
+#define LOCK_PREFIX "\n\tlock; "
+
+/* MOVED TO LINE <> */
+/* #include "atomic_sat.h" */
 
 /*
  * Note: no "lock" prefix even on SMP: xchg always implies lock anyway.
@@ -45,54 +50,36 @@ typedef _Bool                   bool;
  * use "asm volatile" and "memory" clobbers to prevent gcc from moving
  * information around.
  */
-// Begin SVCOMP Model
-#define xchg(ptr, v)	\
-  ({ \
-  __VERIFIER_atomic_begin(); \
-  int temp = (*v); \
-  (*v) = new; \
-  __VERIFIER_atomic_end(); \
-  return temp;\
-}) 
-// End SVCOMP Model
-
-/*#define xchg(ptr, v)	\ */
-/* ({ \ */
-/* 	__typeof__(*(ptr)) __old; \ */
-/* 	__typeof__(ptr) __ptr; \ */
-/* 	__typeof__(*(ptr)) __v; \ */
-/* 	for (;;) { \ */
-/* 		__old = ACCESS_ONCE(*ptr); \ */
-/* 		if (__sync_val_compare_and_swap(__ptr, __old, __v) == __old) \ */
-/* 			return __old; \ */
-/* 	} \ */
-/* 	__old; \ */
-/* }) */
+#define xchg(ptr, v)				\
+  ({						\
+    __VERIFIER_atomic_begin();			\
+    int temp = (*ptr);				\
+    (*ptr) = v;					\
+    __VERIFIER_atomic_end();			\
+    temp;					\
+  }) 
+/*****************************************************************************************/
+/* #define xchg(ptr, v)	\								 */
+/* ({ \											 */
+/* 	__typeof__(*(ptr)) __old; \							 */
+/* 	__typeof__(ptr) __ptr; \							 */
+/* 	__typeof__(*(ptr)) __v; \							 */
+/* 	for (;;) { \									 */
+/* 		__old = ACCESS_ONCE(*ptr); \						 */
+/* 		if (__sync_val_compare_and_swap(__ptr, __old, __v) == __old) \		 */
+/* 			return __old; \							 */
+/* 	} \										 */
+/* 	__old; \									 */
+/* })											 */
+/*****************************************************************************************/
 
 /*
  * Atomic compare and exchange.  Compare OLD with MEM, if identical,
  * store NEW in MEM.  Return the initial value in MEM.  Success is
  * indicated by comparing RETURN with OLD.
  */
-// Begin SVCOMP Model
 #define __raw_cmpxchg(ptr, old, new, size, lock)			\
-  ({									\
-    if (lock[0] != '\0') {						\
-      __VERIFIER_atomic_begin();					\
-    }									\
-    if ((*ptr) == old) {						\
-      (*ptr) = new;							\
-    }									\
-    if (lock[0] != '\0') {						\
-      __VERIFIER_atomic_end();						\
-    }									\
-    return (*ptr);							\
-  })
-// End SVCOMP Model
-
-
-/* #define __raw_cmpxchg(ptr, old, new, size, lock)			\ */
-/* 	__sync_val_compare_and_swap(ptr, old, new) */
+	__sync_val_compare_and_swap(ptr, old, new)
 
 #define __cmpxchg(ptr, old, new, size)					\
 	__raw_cmpxchg((ptr), (old), (new), (size), LOCK_PREFIX)
@@ -105,7 +92,7 @@ typedef _Bool                   bool;
 
 #include "cmpxchg_32_sat.h"
 
-// #ifdef __HAVE_ARCH_CMPXCHG
+/* #ifdef __HAVE_ARCH_CMPXCHG */
 #define cmpxchg(ptr, old, new)						\
 	__cmpxchg(ptr, old, new, sizeof(*(ptr)))
 
@@ -114,7 +101,7 @@ typedef _Bool                   bool;
 
 #define cmpxchg_local(ptr, old, new)					\
 	__cmpxchg_local(ptr, old, new, sizeof(*(ptr)))
-// #endif
+/* #endif */
 
 /*
  * xadd() adds "inc" to "*ptr" and atomically returns the previous
@@ -141,9 +128,11 @@ typedef _Bool                   bool;
 #define add_smp(ptr, inc)	__add((ptr), (inc), LOCK_PREFIX)
 #define add_sync(ptr, inc)	__add((ptr), (inc), "lock; ")
 
-#define barrier() __asm__ __volatile__("": : :"memory")
+/* WEAK MEMORY MODEL NOT USED IN SVCOMP */
+#define barrier() /* __asm__ __volatile__("": : :"memory") */
 #define ACCESS_ONCE(x) (*(volatile typeof(x) *)&(x))
-#define smp_mb() asm volatile("mfence":::"memory")
+/* WEAK MEMORY MODEL NOT USED IN SVCOMP */
+#define smp_mb() /* asm volatile("mfence":::"memory") */
 
 #define likely(x) (x)
 #define unlikely(x) (x)
@@ -160,7 +149,7 @@ void (*cpu_relax_func)(void) = cpu_relax_poll;
 
 #define cpu_relax() cpu_relax_func()
 
-int __thread my_smp_processor_id;
+int __thread my_smp_processor_id = -1;
 
 #define raw_smp_processor_id() my_smp_processor_id
 
@@ -180,7 +169,7 @@ static inline void cpu_init(int cpu)
 			abort(); \
 	} while (0)
 
-#define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
+/* UNDEFINED CODE #define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER) */
 
 /**
  * container_of - cast a member of a structure out to the containing structure
@@ -218,9 +207,9 @@ struct irq_work {
 	int a;
 };
 
-int __thread my_smp_processor_id;
+/* int __thread my_smp_processor_id; */
 
-#define raw_smp_processor_id() my_smp_processor_id
+/* #define raw_smp_processor_id() my_smp_processor_id */
 #define smp_processor_id() my_smp_processor_id
 
 #define WARN_ON_ONCE(c) ({ int __c = (c);  if (__c) abort(); c; })
@@ -238,6 +227,9 @@ struct list_head {
 #define __percpu
 #define __init
 #define __cpuinit
+
+/* MOVED FROM LINE <> */
+#include "atomic.h"
 
 typedef atomic_t atomic_long_t;
 typedef int wait_queue_head_t;
