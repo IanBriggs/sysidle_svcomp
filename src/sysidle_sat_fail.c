@@ -14,7 +14,7 @@ extern void __VERIFIER_atomic_end();
 
 int __unbuffered_cnt = 0;
 
-#define ITER 5
+#define ITER 3
 
 #define CONFIG_NR_CPUS 3
 #define NR_CPUS CONFIG_NR_CPUS
@@ -40,11 +40,12 @@ struct rcu_data *rcu_sched_data_array;
 
 struct rcu_dynticks *rcu_dynticks_array;
 
-int tick_do_timer_cpu;
+pthread_t tick_do_timer_cpu;
 
-void rcu_kick_nohz_cpu(int cpu)
+//void rcu_kick_nohz_cpu(int cpu)
+void rcu_kick_nohz_cpu(pthread_t cpu)
 {
-	printf("Informed CPU %d of end of full-system idle.\n", cpu);
+  //printf("Informed CPU %d of end of full-system idle.\n", cpu);
 }
 
 static int rcu_gp_in_progress(struct rcu_state *rsp)
@@ -102,7 +103,8 @@ void *timekeeping_cpu(void *arg)
 	int i;
 	struct thread_arg *tap = (struct thread_arg *)arg;
 
-	my_smp_processor_id = tap->me;
+	tick_do_timer_cpu = pthread_self();
+	//	my_smp_processor_id = tap->me;
 	for (i = 0; i < ITER; i++) {
 		jiffies++;
 
@@ -123,7 +125,7 @@ void *other_cpu(void *arg)
 	struct rcu_dynticks *rdtp;
 	struct thread_arg *tap = (struct thread_arg *)arg;
 
-	my_smp_processor_id = tap->me;
+	//	my_smp_processor_id = tap->me;
 	rdtp = &rcu_dynticks_array[tap->me];
 	for (i = 0; i < ITER; i++) {
 		/* busy period. */
@@ -185,6 +187,8 @@ int main(int argc, char *argv[])
 	/* Stress test. */
 	printf("Start stress test.\n");
 	pthread_create(&tids[0], NULL, timekeeping_cpu, &ta_array[0]);
+	tick_do_timer_cpu = tids[0];
+
 	for (i = 1; i < nthreads; i++) {
 		pthread_create(&tids[i], NULL, other_cpu, &ta_array[i]);
 	}

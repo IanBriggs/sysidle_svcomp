@@ -149,13 +149,15 @@ void (*cpu_relax_func)(void) = cpu_relax_poll;
 
 #define cpu_relax() cpu_relax_func()
 
-int __thread my_smp_processor_id = -1;
+//THREAD LOCAL IS NOT C99
+//int __thread my_smp_processor_id = -1;
 
-#define raw_smp_processor_id() my_smp_processor_id
+#define raw_smp_processor_id() pthread_self()
+//#define raw_smp_processor_id() my_smp_processor_id
 
 static inline void cpu_init(int cpu)
 {
-	my_smp_processor_id = cpu;
+  //	my_smp_processor_id = cpu;
 }
 
 #define WARN_ON(c) \
@@ -210,7 +212,8 @@ struct irq_work {
 /* int __thread my_smp_processor_id; */
 
 /* #define raw_smp_processor_id() my_smp_processor_id */
-#define smp_processor_id() my_smp_processor_id
+#define smp_processor_id() pthread_self()
+//#define smp_processor_id() my_smp_processor_id
 
 #define WARN_ON_ONCE(c) ({ int __c = (c);  if (__c) abort(); c; })
 

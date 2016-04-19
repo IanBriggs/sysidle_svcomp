@@ -551,7 +551,8 @@ static int rcu_spawn_one_boost_kthread(struct rcu_state *rsp,
 /* UNUSED 				      struct rcu_data *rdp); */
 /* UNUSED static void rcu_boot_init_nocb_percpu_data(struct rcu_data *rdp); */
 /* UNUSED static void rcu_spawn_nocb_kthreads(struct rcu_state *rsp); */
-static void rcu_kick_nohz_cpu(int cpu);
+static void rcu_kick_nohz_cpu(pthread_t cpu);
+//static void rcu_kick_nohz_cpu(int cpu);
 /* UNUSED static bool init_nocb_callback_list(struct rcu_data *rdp); */
 static void rcu_sysidle_enter(struct rcu_dynticks *rdtp, int irq);
 static void rcu_sysidle_exit(struct rcu_dynticks *rdtp, int irq);

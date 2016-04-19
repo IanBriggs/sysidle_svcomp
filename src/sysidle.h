@@ -128,7 +128,8 @@ static void rcu_sysidle_exit(struct rcu_dynticks *rdtp, int irq)
 	 * invoke rcu_sysidle_force_exit() directly if it does anything
 	 * more than take a scheduling-clock interrupt.
 	 */
-	if (smp_processor_id() == tick_do_timer_cpu)
+	  //	if (smp_processor_id() == tick_do_timer_cpu)
+	if (pthread_equals(smp_processor_id(), tick_do_timer_cpu))
 		return;
 
 	/* Update system-idle state: We are clearly no longer fully idle! */
@@ -155,7 +156,8 @@ static void rcu_sysidle_check_cpu(struct rcu_data *rdp, bool *isidle,
 	    cpu_is_offline(rdp->cpu) || rdp->cpu == tick_do_timer_cpu)
 		return;
 	if (rcu_gp_in_progress(rdp->rsp))
-		WARN_ON_ONCE(smp_processor_id() != tick_do_timer_cpu);
+	  WARN_ON_ONCE(!pthread_equals(smp_processor_id(), tick_do_timer_cpu));
+	//		WARN_ON_ONCE(smp_processor_id() != tick_do_timer_cpu);
 
 	/* Pick up current idle and NMI-nesting counter and check. */
 	cur = atomic_read(&rdtp->dynticks_idle);
@@ -175,24 +177,24 @@ static void rcu_sysidle_check_cpu(struct rcu_data *rdp, bool *isidle,
 /*
  * Is this the flavor of RCU that is handling full-system idle?
  */
-/* UNUSED static bool is_sysidle_rcu_state(struct rcu_state *rsp)	*/
-/* UNUSED {								*/
-/* UNUSED 	return rsp == rcu_sysidle_state;			*/
-/* UNUSED }								*/
+static bool is_sysidle_rcu_state(struct rcu_state *rsp)
+{
+	return rsp == rcu_sysidle_state;
+}
 
 /*
  * Bind the grace-period kthread for the sysidle flavor of RCU to the
  * timekeeping CPU.
  */
-/* UNUSED static void rcu_bind_gp_kthread(void)				*/
-/* UNUSED {								*/
-/* UNUSED 	int cpu = ACCESS_ONCE(tick_do_timer_cpu);		*/
-/* UNUSED								*/
-/* UNUSED 	if (cpu < 0 || cpu >= nr_cpu_ids)			*/
-/* UNUSED 		return;						*/
-/* UNUSED 	if (raw_smp_processor_id() != cpu)			*/
-/* UNUSED 		set_cpus_allowed_ptr(current, cpumask_of(cpu));	*/
-/* UNUSED }								*/
+static void rcu_bind_gp_kthread(void)
+{
+	int cpu = ACCESS_ONCE(tick_do_timer_cpu);
+
+	if (cpu < 0 || cpu >= nr_cpu_ids)
+		return;
+	if (raw_smp_processor_id() != cpu)
+		set_cpus_allowed_ptr(current, cpumask_of(cpu));
+}
 
 /*
  * Return a delay in jiffies based on the number of CPUs, rcu_node
@@ -282,11 +284,11 @@ static void rcu_sysidle_report(struct rcu_state *rsp, int isidle,
  * Wrapper for rcu_sysidle_report() when called from the grace-period
  * kthread's context.
  */
-/* UNUSED static void rcu_sysidle_report_gp(struct rcu_state *rsp, int isidle,	*/
-/* UNUSED 				  unsigned long maxj)			*/
-/* UNUSED {									*/
-/* UNUSED 	rcu_sysidle_report(rsp, isidle, maxj, true);			*/
-/* UNUSED }									*/
+static void rcu_sysidle_report_gp(struct rcu_state *rsp, int isidle,
+				  unsigned long maxj)
+{
+	rcu_sysidle_report(rsp, isidle, maxj, true);
+}
 
 /* Callback and function for forcing an RCU grace period. */
 struct rcu_sysidle_head {
@@ -379,10 +381,10 @@ bool rcu_sys_is_idle(void)
 /*
  * Initialize dynticks sysidle state for CPUs coming online.
  */
-/* UNUSED static void rcu_sysidle_init_percpu_data(struct rcu_dynticks *rdtp)	*/
-/* UNUSED {									*/
-/* UNUSED 	rdtp->dynticks_idle_nesting = DYNTICK_TASK_NEST_VALUE;		*/
-/* UNUSED }									*/
+static void rcu_sysidle_init_percpu_data(struct rcu_dynticks *rdtp)
+{
+	rdtp->dynticks_idle_nesting = DYNTICK_TASK_NEST_VALUE;
+}
 
 #else /* #ifdef CONFIG_NO_HZ_FULL_SYSIDLE */
 
